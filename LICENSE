@@ -1,0 +1,82 @@
+Copyright (c) 2026 B. Rohith, C. Srinish, K. Chinmai Datha, K. Shreenandh, M. Satvik Kumar
+
+This repository contains original work by the authors together with code derived from, or copied from, third-party
+TradingView scripts. Different parts are therefore under different terms. In summary:
+
+  Part of the repository                                          Licence
+  --------------------------------------------------------------  ------------------------------------------------
+  Everything not listed below (strategy, Python engine, tests,    CC BY-NC-SA 4.0
+  tooling, tuning logs, results, paper and report material)
+  Portions derived from jdehorty's Lorentzian Classification      Mozilla Public License 2.0, (c) jdehorty
+  and MLExtensions (see section 2)
+  source_indicators/                                              each file under its original author's terms
+  Market data and third-party marks (see sections 4 and 5)        not licensed by the authors
+
+--------------------------------------------------------------------------------------------------------------------
+1. Default licence: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+--------------------------------------------------------------------------------------------------------------------
+
+Unless stated otherwise below, the contents of this repository are licensed under CC BY-NC-SA 4.0:
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
+  Full legal code: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+Why this licence: `Combined Role-Based Strategy.pine` and its Python port in `backtest/engine/` adapt
+"Nadaraya-Watson Trend [QuantAlgo]" by QuantAlgo, which is licensed under CC BY-NC-SA 4.0. Its ShareAlike term
+requires adaptations to be shared under the same licence, and its NonCommercial term rules out commercial use.
+The same licence is applied to the rest of the authors' work so that the repository has one consistent set of terms.
+
+When reusing this work, credit the authors of this repository and the original indicator authors listed in
+README.md section 7.
+
+--------------------------------------------------------------------------------------------------------------------
+2. Portions under the Mozilla Public License 2.0, (c) jdehorty
+--------------------------------------------------------------------------------------------------------------------
+
+The following are derived from jdehorty's "Machine Learning: Lorentzian Classification" indicator and
+"MLExtensions" library, both licensed under the Mozilla Public License 2.0:
+  - the Lorentzian Classification logic in `Combined Role-Based Strategy.pine` and
+    `paper/Combined Role-Based Strategy.baseline.pine`;
+  - `backtest/engine/mlext.py`, a port of jdehorty/MLExtensions/2;
+  - the Lorentzian Classification sections of `backtest/engine/signals.py`.
+
+Those portions remain subject to the terms of the Mozilla Public License 2.0:
+  https://mozilla.org/MPL/2.0/
+The rest of each of these files is under CC BY-NC-SA 4.0 (section 1).
+
+  Sources: https://www.tradingview.com/script/WhBzgfDu-Machine-Learning-Lorentzian-Classification/
+           https://www.tradingview.com/script/ia5ozyMF-MLExtensions/
+
+--------------------------------------------------------------------------------------------------------------------
+3. source_indicators/  (third-party code, not licensed by the authors of this repository)
+--------------------------------------------------------------------------------------------------------------------
+
+The five files in `source_indicators/` are the unmodified published code of their original authors, included for
+provenance. Each remains under its author's own terms, stated in the file's header:
+  - Machine Learning: Lorentzian Classification, by jdehorty: Mozilla Public License 2.0
+  - Nadaraya-Watson Trend [QuantAlgo], by QuantAlgo: CC BY-NC-SA 4.0
+  - Indicator: WaveTrend Oscillator [WT], by LazyBear: no licence stated; open-source under TradingView House Rules
+  - Weis Wave Volume, by modhelius: no licence stated; open-source under TradingView House Rules
+  - Squeeze Momentum Indicator [LazyBear], by LazyBear: no licence stated; open-source under TradingView House Rules
+TradingView script publishing rules (the "House Rules" that the script pages refer to for reuse of open-source code):
+  https://www.tradingview.com/support/solutions/43000590599/
+
+--------------------------------------------------------------------------------------------------------------------
+4. Market data
+--------------------------------------------------------------------------------------------------------------------
+
+`backtest/data/BTCUSDT_1h.csv` (Binance) and `backtest/multimarket/data/BTCUSD_1D.csv` (Bitstamp) are third-party
+market data, included only so that the study can be reproduced. They are not licensed by the authors and remain
+subject to the data providers' terms. Yahoo Finance data is not included (see README.md section 7).
+
+--------------------------------------------------------------------------------------------------------------------
+5. Third-party marks
+--------------------------------------------------------------------------------------------------------------------
+
+The university logo used in the project report (`Project_Report/source/img_p1_13.jpeg`, and as reproduced in the
+report PDFs) belongs to its owner and is not covered by this licence. TradingView, Binance, Bitstamp and Yahoo
+are trademarks of their respective owners.
+
+--------------------------------------------------------------------------------------------------------------------
+
+This work is provided "as is", without warranty of any kind. It is research material and does not constitute
+financial or investment advice.

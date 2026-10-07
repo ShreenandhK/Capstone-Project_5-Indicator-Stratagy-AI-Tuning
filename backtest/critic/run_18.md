@@ -1,0 +1,19 @@
+RUN: 18
+VERDICT: CONTINUE
+SCORECARD:
+- Risk-adjusted: Sharpe 0.196 — BELOW run11's own baseline (0.213) despite ±45 being the midpoint between run11's ±53 and run17's ±40. PF 1.051 (down from run17's 1.098). trade_tstat 0.304, PSR0 0.622 — both between run11 and run17 as expected, but Sharpe itself is not. DSR of current best (still run17) ticks to 0.181 at N=18 (flat vs N=17's 0.179).
+- Drawdown/tail: max_dd 1.67% (worse than both run11 1.53% and run17 1.49%), duration 389d. Skew 0.894, kurtosis 16.58 — between the two endpoints.
+- Significance: trades 203 — within the tuner's predicted 195-210 range.
+- Sub-period/long-short: 2023 -0.006% (nearly zero but still negative, doesn't flip), 2024 +1.782% (WORSE than both endpoints: run11 2.064%, run17 1.833%), 2025H1 -1.120% (WORSE than both endpoints: run11 -0.713%, run17 -0.734%). G4 REVERTS to 1/3 (fails) — the midpoint is not "between" run11 and run17 on two of three sub-periods, it's worse than both. Long PF 1.014 (weakest of the three settings, vs run11 1.035 and run17 1.110); short PF 1.090 (essentially matches run17's 1.086, both above run11's 1.073). Stress -2.10% (worse than run17 -1.42%, better than run11 -2.25%), G3 fails.
+
+RULING ON TUNER'S PRE-STATED CRITERIA: REFUTED, decisively, on BOTH stated conditions simultaneously. (1) Sharpe 0.196 ≤ 0.213 — triggers the REFUTE threshold outright. (2) PF-ex-top-2 (self-derived: top-2 wins $46.32+$43.77=$90.09; (1320.04-90.09)/1256.51 ≈ 0.979) is BELOW 0.985 — also triggers REFUTE. The CONFIRM bar (sharpe≥0.28, PF-ex-top-2≥1.0) is missed by a wide margin on both counts. Worse: the sharpe path across the cap is NON-MONOTONIC — 0.213 (±53) → 0.196 (±45) → 0.355 (±40) — a dip at the midpoint followed by a sharp spike at the endpoint, not a smooth ramp. A genuine "filter overextended reversion entries" mechanism should produce roughly monotonic improvement as the cap tightens; a dip-then-spike shape is the classic signature of a narrow, coincidental sweet spot rather than a broad regime effect.
+
+IMPLICATIONS FOR RUN 17'S CREDIBILITY: This materially weakens confidence in run17 as a genuine discovery. The mechanical selection rule still names run17 current best (0.355 > every other run, none eligible), and that stays unchanged — but my robustness judgment is that run17 should be treated as a likely fragile, narrowly-tuned local spike at exactly ±40, not a validated broad improvement. If FROZEN_PARAMS ultimately selects run17, the OOS result should be expected with real skepticism, and the writeup should flag this non-monotonicity explicitly as an overfitting risk rather than presenting run17 uncritically.
+
+DEMANDS FOR NEXT CONFIG: (1) Do not fine-tune further around ±40 (e.g., ±38/±42) — a non-monotonic response there is noise-chasing, not signal-following. (2) Spend one of the remaining slots on the final endgame item (c): WWV method/length — the last genuinely untested, distinct mechanism. (3) Begin reserving slots for wrap-up (freeze + OOS) — after WWV, further search should be judged against a rising bar given DSR is flat at ~0.18 and this run just supplied direct evidence of fragility in the neighborhood of the current best.
+
+PLATEAU ASSESSMENT: Best (fallback, mechanical) = run17, sharpe 0.355, but now flagged fragile. 7/25 slots remain. PLATEAU still REJECTED — one credible untested lever (WWV) remains — but this is very likely the second-to-last substantive test before plateau becomes appropriate.
+
+---
+
+ORCHESTRATOR NOTE (not critic text): per-trade nesting confirms the critic's reading — run 17 (±40) ⊆ run 18 (±45) ⊆ run 11 (±53), identical exits on all shared trades; band ±53→±45 removed 16 net-winning trades (+$7.63), band ±45→±40 removed 15 net-losing trades (−$48.54, median −0.435 %). Run 18 PF-ex-top-2 = 0.979 (exact), net ex-top-2 −$26.55.

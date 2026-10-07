@@ -1,0 +1,9 @@
+{
+  "exitHoldBars": 12,
+  "riskUseTp": true,
+  "nwSlopeLen": 3,
+  "nwRequirePriceSide": true,
+  "wtTimingMode": "Not Overextended Only",
+  "lcNeighbors": 12,
+  "sqzRegimeMode": "Released Within Window"
+}

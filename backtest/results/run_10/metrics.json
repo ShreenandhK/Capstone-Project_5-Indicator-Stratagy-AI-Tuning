@@ -1,0 +1,130 @@
+{
+  "period": "IS",
+  "window_start": "2023-01-01 00:00:00+00:00",
+  "window_end": "2025-06-30 23:00:00+00:00",
+  "first_bar_time": "2023-01-01 00:00:00+00:00",
+  "last_bar_time": "2025-06-30 23:00:00+00:00",
+  "window_bars": 21887,
+  "start_equity": 10000.0,
+  "final_equity": 10022.204292436358,
+  "net_return_pct": 0.22204292436358575,
+  "cagr_pct": 0.08886761242894448,
+  "ann_vol_pct": 1.2883209500925457,
+  "sharpe": 0.07533520887616502,
+  "sortino": 0.11005444101209222,
+  "max_dd_pct": 1.4971170591172367,
+  "max_dd_duration_days": 425.5,
+  "calmar": 0.05935916092048578,
+  "sharpe_daily": 0.003943225053911538,
+  "skew": 0.3456069135485255,
+  "kurtosis": 14.066290191612682,
+  "n_days": 912,
+  "psr0": 0.5474002051049414,
+  "trades": 192,
+  "win_rate_pct": 47.91666666666667,
+  "profit_factor": 1.0184345614233612,
+  "gross_profit_usd": 1226.6968716968804,
+  "gross_loss_usd": 1204.4925792605197,
+  "net_pnl_usd": 22.204292436360447,
+  "avg_trade_return_pct": 0.012743077598798598,
+  "median_trade_return_pct": -0.09312186685296386,
+  "avg_win_pct": 1.3340199479302044,
+  "avg_loss_pct": -1.2028316431060946,
+  "avg_win_usd": 13.333661648879135,
+  "avg_loss_usd": -12.044925792605197,
+  "expectancy_usd": 0.11564735643937733,
+  "avg_bars_held": 7.416666666666667,
+  "max_consecutive_losses": 5,
+  "payoff_ratio": 1.1069940885036533,
+  "trade_tstat": 0.11413992773785361,
+  "win_rate_ci95_low_pct": 40.96078946077781,
+  "win_rate_ci95_high_pct": 54.95427364783367,
+  "long_trades": 99,
+  "long_profit_factor": 1.0451939390324976,
+  "long_net_pnl_usd": 28.143388974022585,
+  "short_trades": 93,
+  "short_profit_factor": 0.989791292547594,
+  "short_net_pnl_usd": -5.939096537662086,
+  "exit_reasons": {
+    "LC Exit": 79,
+    "SL": 57,
+    "TP": 56,
+    "Reverse": 0,
+    "WindowEnd": 0
+  },
+  "bars_in_position": 1424,
+  "exposure_pct": 6.506145200347238,
+  "subperiods": {
+    "2023": {
+      "net_return_pct": -0.7623391637769927,
+      "sharpe": -0.7703555160080345,
+      "trades": 57,
+      "profit_factor": 0.7805117245578671,
+      "bars": 8759
+    },
+    "2024": {
+      "net_return_pct": 1.7146925303533456,
+      "sharpe": 1.1754578243372922,
+      "trades": 84,
+      "profit_factor": 1.3289213161271962,
+      "bars": 8784
+    },
+    "2025H1": {
+      "net_return_pct": -0.7105644682525947,
+      "sharpe": -0.9772249399068818,
+      "trades": 51,
+      "profit_factor": 0.7889439135826681,
+      "bars": 4344
+    }
+  },
+  "buy_and_hold": {
+    "net_return_pct": 547.7329814161362,
+    "sharpe": 1.7868532260277095,
+    "max_dd_pct": 32.31069072207684,
+    "sortino": 2.9197571846708037,
+    "cagr_pct": 111.32883764210595
+  },
+  "stress": {
+    "costs": {
+      "commission_pct": 0.1,
+      "slip_mode": "bps",
+      "slip_value": 5
+    },
+    "net_return_pct": -2.3496219420014675,
+    "sharpe": -0.7195356224200632,
+    "profit_factor": 0.8250304855338161,
+    "trades": 192,
+    "max_dd_pct": 2.688561667599676
+  },
+  "costs": {
+    "commission_pct": 0.075,
+    "slip_mode": "ticks",
+    "slip_value": 2,
+    "mintick": 0.01
+  },
+  "gates": {
+    "G1": {
+      "rule": "trades >= 100",
+      "value": 192,
+      "pass": true
+    },
+    "G2": {
+      "rule": "profit_factor > 1.0",
+      "value": 1.0184345614233612,
+      "pass": true
+    },
+    "G3": {
+      "rule": "stress.net_return_pct > 0",
+      "value": -2.3496219420014675,
+      "pass": false
+    },
+    "G4": {
+      "rule": ">= 2 of 3 IS sub-periods (2023, 2024, 2025H1) with net_return_pct > 0",
+      "value": 1,
+      "pass": false
+    }
+  },
+  "eligible": false,
+  "runtime_s": 2.2721512999996776,
+  "signals_runtime_s": 2.200630999999703
+}

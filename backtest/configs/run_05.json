@@ -1,0 +1,7 @@
+{
+  "exitHoldBars": 12,
+  "riskUseTp": true,
+  "nwSlopeLen": 3,
+  "nwRequirePriceSide": true,
+  "wtTimingMode": "Not Overextended Only"
+}

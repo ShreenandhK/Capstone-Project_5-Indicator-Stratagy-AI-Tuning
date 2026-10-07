@@ -1,0 +1,558 @@
+{
+  "market": "NIFTY_1D",
+  "label": "NSE:NIFTY 1D",
+  "timeframe": "1D",
+  "data": {
+    "source": "Yahoo Finance GET /v8/finance/chart/^NSEI interval=1d (split-adjusted, not dividend-adjusted)",
+    "tradingview_symbol": "NSE:NIFTY",
+    "session_date": "Asia/Kolkata date",
+    "splits": [],
+    "quality": {
+      "rows_dropped_na_or_nonpositive": 34,
+      "rows_ohlc_repaired": 0,
+      "flat_bars_o_eq_h_eq_l_eq_c": 0,
+      "zero_or_na_volume_bars": 1333,
+      "close_moves_gt_20pct": [],
+      "calendar_gaps_gt_5_days": [
+        {
+          "after": "2014-10-01",
+          "next": "2014-10-07",
+          "days": 6
+        }
+      ]
+    },
+    "fetched_utc": "2026-09-13T20:42:16Z",
+    "rows": 4659,
+    "first_bar": "2007-09-17T00:00:00Z",
+    "last_bar": "2026-09-11T00:00:00Z",
+    "sha256": "21fb5a4b5f53628194ba280db1e708b26d73955caed64f93d9ff84e55686395d"
+  },
+  "bars_total": 4659,
+  "warmup_bars": 2000,
+  "window_start": "2015-11-30",
+  "window_end": "2026-09-11",
+  "window_bars": 2659,
+  "params": {
+    "config_hash": "ee67637fc13d",
+    "strategy_props": {
+      "initial_capital": 10000.0,
+      "default_qty_value": 10.0,
+      "commission_value": 0.075,
+      "slippage": 2.0,
+      "pyramiding": 0.0
+    },
+    "matches_frozen_run": null,
+    "diff_vs_frozen": {
+      "nwBandwidth": [
+        5,
+        8
+      ],
+      "nwSlopeLen": [
+        3,
+        1
+      ],
+      "nwRequirePriceSide": [
+        true,
+        false
+      ],
+      "lcNeighbors": [
+        12,
+        8
+      ],
+      "wtObLevel2": [
+        40,
+        53
+      ],
+      "wtOsLevel2": [
+        -40,
+        -53
+      ],
+      "wtTimingMode": [
+        "Not Overextended Only",
+        "Recent Cross + Not Overextended"
+      ],
+      "exitHoldBars": [
+        12,
+        4
+      ],
+      "riskUseTp": [
+        true,
+        false
+      ]
+    },
+    "diff_vs_engine_defaults": {},
+    "variant": "pretuning",
+    "diff_vs_current_pine": {
+      "nwBandwidth": [
+        8,
+        5
+      ],
+      "nwSlopeLen": [
+        1,
+        3
+      ],
+      "nwRequirePriceSide": [
+        false,
+        true
+      ],
+      "lcNeighbors": [
+        8,
+        12
+      ],
+      "wtObLevel2": [
+        53,
+        40
+      ],
+      "wtOsLevel2": [
+        -53,
+        -40
+      ],
+      "wtTimingMode": [
+        "Recent Cross + Not Overextended",
+        "Not Overextended Only"
+      ],
+      "exitHoldBars": [
+        4,
+        12
+      ],
+      "riskUseTp": [
+        false,
+        true
+      ]
+    }
+  },
+  "base": {
+    "final_equity": 9867.829997570816,
+    "net_profit": -132.17000242918402,
+    "net_return_pct": -1.3217000242918386,
+    "cagr_pct": -0.12329777331997471,
+    "ann_vol_pct": 0.32658573509259026,
+    "sharpe": -0.3844694054845286,
+    "sortino": -0.4839274700225282,
+    "max_drawdown": 179.90460426168283,
+    "max_drawdown_pct": 1.7926149506327427,
+    "max_drawdown_duration_days": 3271.0,
+    "psr_sharpe_gt_0": 0.09641537807133288,
+    "n_days": 2659,
+    "annualisation_periods": 252,
+    "trades": 36,
+    "exposure_pct": 4.550582925911997,
+    "all": {
+      "trades": 36,
+      "net_profit": -132.17000242918473,
+      "gross_profit": 184.44307291121493,
+      "gross_loss": 316.6130753403996,
+      "profit_factor": 0.5825503975567498,
+      "percent_profitable": 41.66666666666667,
+      "winning_trades": 15,
+      "losing_trades": 21,
+      "avg_trade": -3.6713889563662425,
+      "avg_trade_pct": -0.3701334361011826,
+      "median_trade_pct": -0.36662965298320793,
+      "avg_win": 12.296204860747661,
+      "avg_loss": -15.0768131114476,
+      "ratio_avg_win_avg_loss": 0.8155705565794495,
+      "largest_win": 41.29894505446737,
+      "largest_loss": -45.44122020942901,
+      "avg_bars_in_trade": 3.361111111111111,
+      "commission_paid": 53.94114141516916
+    },
+    "long": {
+      "trades": 19,
+      "net_profit": 67.44422784595865,
+      "gross_profit": 155.5856861242811,
+      "gross_loss": 88.14145827832243,
+      "profit_factor": 1.765181665510814,
+      "percent_profitable": 57.89473684210527,
+      "winning_trades": 11,
+      "losing_trades": 8,
+      "avg_trade": 3.5496962024188763,
+      "avg_trade_pct": 0.35645117444482627,
+      "median_trade_pct": 0.5681760070223902,
+      "avg_win": 14.144153284025554,
+      "avg_loss": -11.017682284790304,
+      "ratio_avg_win_avg_loss": 1.2837684840078647,
+      "largest_win": 41.29894505446737,
+      "largest_loss": -24.978260752085173,
+      "avg_bars_in_trade": 3.6315789473684212,
+      "commission_paid": 28.43061665072524
+    },
+    "short": {
+      "trades": 17,
+      "net_profit": -199.61423027514337,
+      "gross_profit": 28.857386786933816,
+      "gross_loss": 228.4716170620772,
+      "profit_factor": 0.1263062220069685,
+      "percent_profitable": 23.52941176470588,
+      "winning_trades": 4,
+      "losing_trades": 13,
+      "avg_trade": -11.742013545596668,
+      "avg_trade_pct": -1.182198589064369,
+      "median_trade_pct": -0.9116374825726024,
+      "avg_win": 7.214346696733454,
+      "avg_loss": -17.574739774005938,
+      "ratio_avg_win_avg_loss": 0.41049522152264767,
+      "largest_win": 15.683502232760473,
+      "largest_loss": -45.44122020942901,
+      "avg_bars_in_trade": 3.0588235294117645,
+      "commission_paid": 25.51052476444392
+    },
+    "exit_reasons": {
+      "LC Exit": 26,
+      "SL": 10
+    },
+    "trade_tstat": -1.2538543180979977,
+    "win_rate_ci95_pct": [
+      27.14056205144606,
+      57.79974842512834
+    ],
+    "costs": {
+      "commission_pct": 0.075,
+      "slip_mode": "ticks",
+      "slip_value": 2,
+      "mintick": 0.05
+    }
+  },
+  "stress": {
+    "final_equity": 9814.87544373819,
+    "net_profit": -185.12455626180963,
+    "net_return_pct": -1.851245562618098,
+    "cagr_pct": -0.17311845451172259,
+    "ann_vol_pct": 0.3322287033333856,
+    "sharpe": -0.531377261258067,
+    "sortino": -0.6556050747920688,
+    "max_drawdown": 221.68468757154915,
+    "max_drawdown_pct": 2.2100720725308998,
+    "max_drawdown_duration_days": 3271.0,
+    "psr_sharpe_gt_0": 0.033275723888771355,
+    "n_days": 2659,
+    "annualisation_periods": 252,
+    "trades": 36,
+    "exposure_pct": 4.550582925911997,
+    "all": {
+      "trades": 36,
+      "net_profit": -185.1245562618065,
+      "gross_profit": 163.05901179890367,
+      "gross_loss": 348.18356806071006,
+      "profit_factor": 0.46831334605219604,
+      "percent_profitable": 36.11111111111111,
+      "winning_trades": 13,
+      "losing_trades": 23,
+      "avg_trade": -5.142348785050181,
+      "avg_trade_pct": -0.5195877189847495,
+      "median_trade_pct": -0.5156124112780642,
+      "avg_win": 12.543000907607974,
+      "avg_loss": -15.138416002639568,
+      "ratio_avg_win_avg_loss": 0.8285543814769623,
+      "largest_win": 39.60614144416857,
+      "largest_loss": -46.87901604796069,
+      "avg_bars_in_trade": 3.361111111111111,
+      "commission_paid": 71.73466471780348
+    },
+    "long": {
+      "trades": 19,
+      "net_profit": 39.15483078791243,
+      "gross_profit": 139.1727525914588,
+      "gross_loss": 100.01792180354636,
+      "profit_factor": 1.3914781479345246,
+      "percent_profitable": 52.63157894736842,
+      "winning_trades": 10,
+      "losing_trades": 9,
+      "avg_trade": 2.0607805677848647,
+      "avg_trade_pct": 0.20751143710542608,
+      "median_trade_pct": 0.41941032965345565,
+      "avg_win": 13.917275259145878,
+      "avg_loss": -11.113102422616262,
+      "ratio_avg_win_avg_loss": 1.252330333141072,
+      "largest_win": 39.60614144416857,
+      "largest_loss": -26.33446420925284,
+      "avg_bars_in_trade": 3.6315789473684212,
+      "commission_paid": 37.81535250768959
+    },
+    "short": {
+      "trades": 17,
+      "net_profit": -224.27938704971896,
+      "gross_profit": 23.886259207444855,
+      "gross_loss": 248.1656462571638,
+      "profit_factor": 0.09625127235657958,
+      "percent_profitable": 17.647058823529413,
+      "winning_trades": 3,
+      "losing_trades": 14,
+      "avg_trade": -13.192905120571703,
+      "avg_trade_pct": -1.3322279522620046,
+      "median_trade_pct": -1.0619265487863314,
+      "avg_win": 7.962086402481618,
+      "avg_loss": -17.726117589797415,
+      "ratio_avg_win_avg_loss": 0.44917260433070466,
+      "largest_win": 14.180460003273406,
+      "largest_loss": -46.87901604796069,
+      "avg_bars_in_trade": 3.0588235294117645,
+      "commission_paid": 33.91931221011388
+    },
+    "exit_reasons": {
+      "LC Exit": 26,
+      "SL": 10
+    },
+    "trade_tstat": -1.7600810308733164,
+    "win_rate_ci95_pct": [
+      22.47559294651537,
+      52.42492451444196
+    ],
+    "costs": {
+      "commission_pct": 0.1,
+      "slip_mode": "bps",
+      "slip_value": 5
+    }
+  },
+  "long_only": {
+    "final_equity": 10068.277625859297,
+    "net_profit": 68.27762585929668,
+    "net_return_pct": 0.6827762585929653,
+    "cagr_pct": 0.06311625838069101,
+    "ann_vol_pct": 0.18778499935105272,
+    "sharpe": 0.3443554108206094,
+    "sortino": 0.5427196886569036,
+    "max_drawdown": 56.40498837453379,
+    "max_drawdown_pct": 0.5622111164553245,
+    "max_drawdown_duration_days": 1317.0,
+    "psr_sharpe_gt_0": 0.8740150325760245,
+    "n_days": 2659,
+    "annualisation_periods": 252,
+    "trades": 19,
+    "exposure_pct": 2.594960511470478,
+    "all": {
+      "trades": 19,
+      "net_profit": 68.27762585929753,
+      "gross_profit": 157.37313883619996,
+      "gross_loss": 89.09551297690243,
+      "profit_factor": 1.7663419130545683,
+      "percent_profitable": 57.89473684210527,
+      "winning_trades": 11,
+      "losing_trades": 8,
+      "avg_trade": 3.5935592557525013,
+      "avg_trade_pct": 0.35645117444482627,
+      "median_trade_pct": 0.5681760070223902,
+      "avg_win": 14.306648985109087,
+      "avg_loss": -11.136939122112803,
+      "ratio_avg_win_avg_loss": 1.2846123004033225,
+      "largest_win": 42.06737999459999,
+      "largest_loss": -25.39260279292653,
+      "avg_bars_in_trade": 3.6315789473684212,
+      "commission_paid": 28.689581382854012
+    },
+    "long": {
+      "trades": 19,
+      "net_profit": 68.27762585929753,
+      "gross_profit": 157.37313883619996,
+      "gross_loss": 89.09551297690243,
+      "profit_factor": 1.7663419130545683,
+      "percent_profitable": 57.89473684210527,
+      "winning_trades": 11,
+      "losing_trades": 8,
+      "avg_trade": 3.5935592557525013,
+      "avg_trade_pct": 0.35645117444482627,
+      "median_trade_pct": 0.5681760070223902,
+      "avg_win": 14.306648985109087,
+      "avg_loss": -11.136939122112803,
+      "ratio_avg_win_avg_loss": 1.2846123004033225,
+      "largest_win": 42.06737999459999,
+      "largest_loss": -25.39260279292653,
+      "avg_bars_in_trade": 3.6315789473684212,
+      "commission_paid": 28.689581382854012
+    },
+    "short": {
+      "trades": 0,
+      "net_profit": 0.0,
+      "gross_profit": 0.0,
+      "gross_loss": -0.0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN,
+      "winning_trades": 0,
+      "losing_trades": 0,
+      "avg_trade": NaN,
+      "avg_trade_pct": NaN,
+      "median_trade_pct": NaN,
+      "avg_win": NaN,
+      "avg_loss": NaN,
+      "ratio_avg_win_avg_loss": NaN,
+      "largest_win": NaN,
+      "largest_loss": NaN,
+      "avg_bars_in_trade": NaN,
+      "commission_paid": 0.0
+    },
+    "exit_reasons": {
+      "LC Exit": 16,
+      "SL": 3
+    },
+    "trade_tstat": 0.9473964583480317,
+    "win_rate_ci95_pct": [
+      36.275903534255036,
+      76.85810871754576
+    ],
+    "costs": {
+      "commission_pct": 0.075,
+      "slip_mode": "ticks",
+      "slip_value": 2,
+      "mintick": 0.05
+    }
+  },
+  "buy_and_hold": {
+    "final_equity": 29482.56369191999,
+    "net_profit": 19482.56369191999,
+    "net_return_pct": 194.8256369191999,
+    "cagr_pct": 10.545528281126515,
+    "ann_vol_pct": 16.126762161211612,
+    "sharpe": 0.7167339559803337,
+    "sortino": 0.9937422337426376,
+    "max_drawdown": 5987.777350763899,
+    "max_drawdown_pct": 38.4398524293999,
+    "max_drawdown_duration_days": 463.0,
+    "psr_sharpe_gt_0": 0.9882600243514166,
+    "n_days": 2659,
+    "annualisation_periods": 252
+  },
+  "years": {
+    "2015": {
+      "from": "2015-11-30",
+      "to": "2015-12-31",
+      "net_return_pct": 0.0,
+      "buy_and_hold_pct": 0.12726537092455636,
+      "sharpe": NaN,
+      "trades": 0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN
+    },
+    "2016": {
+      "from": "2016-01-04",
+      "to": "2016-12-30",
+      "net_return_pct": 0.14163555600226196,
+      "buy_and_hold_pct": 3.0133294411514244,
+      "sharpe": 1.6940397169379864,
+      "trades": 1,
+      "profit_factor": Infinity,
+      "percent_profitable": 100.0
+    },
+    "2017": {
+      "from": "2017-01-02",
+      "to": "2017-12-29",
+      "net_return_pct": -0.015559510845675195,
+      "buy_and_hold_pct": 28.645953368755773,
+      "sharpe": -0.05201464611946673,
+      "trades": 5,
+      "profit_factor": 0.9079959642028314,
+      "percent_profitable": 60.0
+    },
+    "2018": {
+      "from": "2018-01-02",
+      "to": "2018-12-31",
+      "net_return_pct": -0.6138439924855632,
+      "buy_and_hold_pct": 3.151258640902155,
+      "sharpe": -1.685608158753904,
+      "trades": 3,
+      "profit_factor": 0.008241946914338652,
+      "percent_profitable": 33.33333333333333
+    },
+    "2019": {
+      "from": "2019-01-02",
+      "to": "2019-12-31",
+      "net_return_pct": -0.2624046627774712,
+      "buy_and_hold_pct": 12.02204292771112,
+      "sharpe": -0.7105852211688863,
+      "trades": 5,
+      "profit_factor": 0.28194561650795685,
+      "percent_profitable": 20.0
+    },
+    "2020": {
+      "from": "2020-01-01",
+      "to": "2020-12-31",
+      "net_return_pct": -0.008303193117709107,
+      "buy_and_hold_pct": 14.901649513263425,
+      "sharpe": -0.023980374095509644,
+      "trades": 4,
+      "profit_factor": 0.9774601155774232,
+      "percent_profitable": 50.0
+    },
+    "2021": {
+      "from": "2021-01-01",
+      "to": "2021-12-31",
+      "net_return_pct": -0.11468146934781043,
+      "buy_and_hold_pct": 24.119303949791693,
+      "sharpe": -0.21180094202978852,
+      "trades": 3,
+      "profit_factor": 0.5257582106056439,
+      "percent_profitable": 33.33333333333333
+    },
+    "2022": {
+      "from": "2022-01-03",
+      "to": "2022-12-30",
+      "net_return_pct": -0.20903747051411736,
+      "buy_and_hold_pct": 4.328960480315014,
+      "sharpe": -0.5567318434606839,
+      "trades": 3,
+      "profit_factor": 0.4308059966349168,
+      "percent_profitable": 33.33333333333333
+    },
+    "2023": {
+      "from": "2023-01-02",
+      "to": "2023-12-29",
+      "net_return_pct": 0.25988676440020786,
+      "buy_and_hold_pct": 20.027834135766255,
+      "sharpe": 2.511246727455987,
+      "trades": 2,
+      "profit_factor": Infinity,
+      "percent_profitable": 100.0
+    },
+    "2024": {
+      "from": "2024-01-01",
+      "to": "2024-12-31",
+      "net_return_pct": -0.4418458054685104,
+      "buy_and_hold_pct": 8.804772613183642,
+      "sharpe": -1.6687364323462774,
+      "trades": 5,
+      "profit_factor": 0.2300381823495936,
+      "percent_profitable": 40.0
+    },
+    "2025": {
+      "from": "2025-01-01",
+      "to": "2025-12-31",
+      "net_return_pct": 0.06809926439803604,
+      "buy_and_hold_pct": 10.508859233450462,
+      "sharpe": 0.2063709946965792,
+      "trades": 4,
+      "profit_factor": 1.19448007571273,
+      "percent_profitable": 25.0
+    },
+    "2026": {
+      "from": "2026-01-01",
+      "to": "2026-09-11",
+      "net_return_pct": -0.13041024813146285,
+      "buy_and_hold_pct": -10.453661903623779,
+      "sharpe": -1.107550510457274,
+      "trades": 1,
+      "profit_factor": 0.0,
+      "percent_profitable": 0.0
+    }
+  },
+  "periods": {},
+  "funnel": {
+    "long": {
+      "LC entry window (fresh flip)": 112,
+      "+ SQZ regime gate": 61,
+      "+ NW trend": 50,
+      "+ WT timing": 19,
+      "+ WWV confirmation": 19,
+      "= entry condition bars": 19
+    },
+    "short": {
+      "LC entry window (fresh flip)": 126,
+      "+ SQZ regime gate": 60,
+      "+ NW trend": 27,
+      "+ WT timing": 17,
+      "+ WWV confirmation": 17,
+      "= entry condition bars": 17
+    },
+    "lc_flips_long": 46,
+    "lc_flips_short": 47
+  },
+  "runtime_s": 0.34080639999592677
+}

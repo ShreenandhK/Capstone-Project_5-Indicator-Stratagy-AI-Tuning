@@ -1,0 +1,13 @@
+item,value
+selected_run,17
+config_hash,b8376d7d48f5
+selection_status,FAILED PRE-REGISTERED GATES
+selection_rule,"Eligible = G1 trades>=100, G2 profit_factor>1.0, G3 stress.net_return_pct>0, G4 >=2 of 3 IS sub-periods (2023, 2024, 2025H1) net_return_pct>0. Best = eligible run with highest IS sharpe (ties -> more trades). Fallback if none eligible: highest sharpe among runs with trades>=30, flagged 'FAILED PRE-REGISTERED GATES'."
+n_trials,19
+is_sharpe_annualised,0.3553
+is_sharpe_daily,0.0186
+var_trial_sharpe_daily,0.0006
+expected_max_sharpe_daily_sr0,0.0477
+deflated_sharpe_ratio,0.187
+n_days,912
+frozen_utc,2026-09-13T20:02:01Z

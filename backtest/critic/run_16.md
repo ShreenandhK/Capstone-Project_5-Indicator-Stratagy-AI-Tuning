@@ -1,0 +1,13 @@
+RUN: 16
+VERDICT: CONTINUE
+SCORECARD:
+- Risk-adjusted: Sharpe 0.213(run11)→0.036 (Δ-0.178 — a clear regression, though the mildest of the last three probes; run14 was -0.168, run15 was -0.290). PF 1.053→1.007 (still >1, but barely — the weakest PF pass in the 06+ family). PSR0 0.632→0.523, trade_tstat 0.329→0.055 (essentially indistinguishable from zero). 10th consecutive run below the 0.276 bar.
+- Drawdown: max_dd flat ~1.53%, duration flat ~402d. Skew 0.821→0.558 (weaker), kurtosis 15.5→14.75 (slightly better).
+- Significance: trades 219→221 (close to the tuner's 85-95% overlap prediction — a well-isolated single-lever test), win rate 48.4%→47.1%.
+- Robustness: Long PF IMPROVED (1.035→1.070, net +$24.0→+$49.1) — some support for the "trend-context" mechanism on the long side. But short PF collapsed below 1.0 (1.073→0.945, net +$46.4→-$39.0), erasing the long-side gain and then some. 2023 flat (-0.623%→-0.613%), 2024 worse (2.064%→1.455%), 2025H1 flat (-0.713%→-0.727%). G4 still 1/3. Stress worse (-2.252%→-2.863%), still fails G3.
+
+RULING ON ENDGAME HYPOTHESIS (a) — LC feature type swap: FAILS the criterion. Headline PF (1.007) is now barely above 1.0 at all — given the consistent ~0.07 gap between headline PF and PF-ex-top-2 observed across every prior run in this family (run06: 1.060→0.983; run11: 1.053→0.985), PF-ex-top-2 for run16 is very likely still below 1.0 (≈0.93-0.94 by extrapolation; awaiting exact diagnostic). Sharpe, trade_tstat, PSR0, 2024, and stress all moved the wrong way vs run11. The mechanism (ADX-50 regime context sharpens neighbor matching) shows a plausible partial effect (long PF up) but is dominated by short-side damage — net, this is a refutation, not a confirmation. Hypothesis (a): REFUTED.
+
+DEMANDS FOR NEXT CONFIG: (1) Revert to run11 base. (2) Proceed to endgame hypothesis (b): `wtObLevel2`/`wtOsLevel2` tightening — untested, distinct mechanism (timing role, not entry role), worth its own clean test given (a) is now closed. (3) Reserve the final slot for (c) WWV method/length only if (b) also fails to move PF-ex-top-2 above 1.0.
+
+PLATEAU ASSESSMENT: Best (fallback) = run06, sharpe 0.226; 10 consecutive non-improving runs; 9/25 slots remain. Endgame status: (a) LC feature type — TESTED, REFUTED. (b) WT ob/os caps — untested. (c) WWV method/length — untested. Per the pre-committed endgame plan, PLATEAU is warranted only if (b) and (c) also fail to lift PF-ex-top-2 above 1.0. Two credible, mechanistically distinct, entirely untested hypotheses remain, so PLATEAU is REJECTED this run. Recommend testing (b) next with 8-9 slots still available, leaving adequate buffer (5-6 slots) after (b)/(c) for freeze + OOS regardless of outcome.

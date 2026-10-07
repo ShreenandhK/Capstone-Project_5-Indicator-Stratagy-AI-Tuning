@@ -1,0 +1,533 @@
+//@version=6
+// =====================================================================================================
+// COMBINED ROLE-BASED STRATEGY  (Pine Script v6)
+// Ported from local sources in source_indicators/: Nadaraya-Watson Trend.pine, Lorentzian Classification.pine,
+// WaveTrend Oscillator.pine, Weis Wave Volume.pine, Squeeze Momentum.pine
+// =====================================================================================================
+// CREDITS: this strategy re-implements logic from five open-source TradingView indicators. Full
+// citations, licences and the unmodified original code are in the header of each local source file.
+//  1) Machine Learning: Lorentzian Classification, by jdehorty (https://www.tradingview.com/u/jdehorty/)
+//     https://www.tradingview.com/script/WhBzgfDu-Machine-Learning-Lorentzian-Classification/
+//     Mozilla Public License 2.0, (c) jdehorty. Also uses jdehorty's MLExtensions and KernelFunctions libraries.
+//  2) Nadaraya-Watson Trend [QuantAlgo], by QuantAlgo (https://www.tradingview.com/u/QuantAlgo/)
+//     https://www.tradingview.com/script/DyPTog1C-Nadaraya-Watson-Trend-QuantAlgo/
+//     CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/), (c) QuantAlgo
+//  3) Indicator: WaveTrend Oscillator [WT], by LazyBear (https://www.tradingview.com/u/LazyBear/)
+//     https://www.tradingview.com/script/2KE8wTuF-Indicator-WaveTrend-Oscillator-WT/
+//  4) Weis Wave Volume, by modhelius (https://www.tradingview.com/u/modhelius/)
+//     https://www.tradingview.com/script/QrCFs0K2-Weis-Wave-Volume/
+//  5) Squeeze Momentum Indicator [LazyBear], by LazyBear (https://www.tradingview.com/u/LazyBear/)
+//     https://www.tradingview.com/script/nqQ1DT5a-Squeeze-Momentum-Indicator-LazyBear/
+// =====================================================================================================
+// ROLE ASSIGNMENTS (each indicator is used ONLY in its role)
+//  1) Nadaraya-Watson Trend (QuantAlgo) ........ TREND  - directional bias filter only
+//     - Causal ENDPOINT estimator only: NW(t) = sum(w(i) * src[t-i]) / sum(w(i)), i = 0..lookback.
+//       Only current and past bars are used. The source script has no non-causal (two-sided /
+//       centered) mode; none is ported. Residual bands, gradient, markers are not used.
+//     - Presets removed (hardcoded values); set Lookback/Bandwidth/Multiplier manually instead
+//       (Fast Response = 25/5/1.5, Smooth Trend = 100/12/2.5).
+//     - trendLong  = NW(t) > NW(t-k)   [+ optional: source > NW]
+//     - trendShort = NW(t) < NW(t-k)   [+ optional: source < NW]
+//  2) Lorentzian Classification (jdehorty) ...... ENTRY  - the ONLY source of entry signals
+//     - Approximate-nearest-neighbour Lorentzian KNN, features, label logic and the LC-internal
+//       prediction filters (volatility / regime / ADX) are ported as in the source.
+//     - LC's own kernel-regression filter and EMA/SMA filters are REMOVED: the trend role belongs
+//       exclusively to Nadaraya-Watson.
+//     - entryLong  = LC signal flipped to LONG within the last N bars, is still LONG, and that flip
+//       has not already produced a trade. entryShort mirrored.
+//  3) WaveTrend (LazyBear) ...................... TIMING - valid entry window
+//     - timingLong  = WT1 < overbought cap  AND (mode) WT1 crossed above WT2 within N bars and WT1 > WT2
+//     - timingShort = WT1 > oversold cap    AND (mode) WT1 crossed below WT2 within N bars and WT1 < WT2
+//  4) Weis Wave Volume .......................... CONFIRMATION - wave must agree with direction
+//     - confirmLong  = current Weis wave direction is UP   [+ optional: wave volume >= avg * mult]
+//     - confirmShort = current Weis wave direction is DOWN [+ optional: wave volume >= avg * mult]
+//  5) Squeeze Momentum (LazyBear) ............... REGIME GATE - non-directional
+//     - regimeGate = 'Squeeze Off' | 'Not In Squeeze' | 'Released Within Window'
+//                    [+ optional: |momentum| expanding, no sign used]
+//
+// ENTRY RULES (evaluated on confirmed bars only)
+//  LONG  = barConfirmed AND allowLongs  AND regimeGate AND trendLong  AND entryLong  AND timingLong  AND confirmLong
+//  SHORT = barConfirmed AND allowShorts AND regimeGate AND trendShort AND entryShort AND timingShort AND confirmShort
+//  An opposite combined entry reverses the open position.
+//
+// EXIT RULES
+//  - Exit Mode (derived from the LC entry-signal source only):
+//      'LC Signal Flip'      : close LONG on a new LC SHORT signal (SHORT mirrored)
+//      'LC Fixed Hold'       : close after N bars counted from the entry-signal bar (LC training horizon)
+//      'Either (LC Default)' : whichever comes first (mirrors LC's default strict 4-bar exit + early flip)
+//  - Optional ATR stop-loss / take-profit (risk management, not an indicator role). Levels are
+//    fixed from the signal-bar close and ATR and do not move afterwards.
+//
+// EXECUTION / REPAINTING NOTES
+//  - process_orders_on_close = false: signals are computed on the confirmed bar close and orders fill
+//    at the NEXT bar open, so no fill occurs at a price that was already known when the signal formed.
+//  - calc_on_every_tick = false and all signals are gated by barstate.isconfirmed.
+//  - No request.security calls are used (no higher-timeframe data, no lookahead).
+//  - Weis Wave Volume 'timeframe' parameter from the indicator() call is not ported (chart timeframe).
+//  - LC anchors its training window on last_bar_index (as in the source). Confirmed signals do not
+//    change within a session, but historical signals can shift when the chart is reloaded with more bars.
+// =====================================================================================================
+strategy('Combined Role-Based Strategy', shorttitle = 'CRB Strategy', overlay = true,
+     initial_capital = 10000, currency = currency.NONE,
+     default_qty_type = strategy.percent_of_equity, default_qty_value = 10,
+     pyramiding = 0, margin_long = 100, margin_short = 100,
+     commission_type = strategy.commission.percent, commission_value = 0.075, slippage = 2,
+     process_orders_on_close = false, calc_on_every_tick = false, calc_on_order_fills = false,
+     max_bars_back = 500)
+
+import jdehorty/MLExtensions/2 as ml
+
+// =====================================================================================================
+// INPUT GROUPS
+// =====================================================================================================
+G_STRAT   = 'Strategy Controls'
+G_TREND   = 'Trend | Nadaraya-Watson'
+G_ENTRY   = 'Entry | Lorentzian Classification'
+G_ENTRY_F = 'Entry | LC Feature Engineering'
+G_ENTRY_X = 'Entry | LC Prediction Filters'
+G_TIMING  = 'Timing | WaveTrend'
+G_CONFIRM = 'Confirmation | Weis Wave Volume'
+G_REGIME  = 'Regime Gate | Squeeze Momentum'
+G_EXIT    = 'Exits & Risk'
+
+// ---- Strategy controls
+allowLongs  = input.bool(true, 'Allow Longs', group = G_STRAT)
+allowShorts = input.bool(true, 'Allow Shorts', group = G_STRAT)
+
+// =====================================================================================================
+// TREND | NADARAYA-WATSON (causal endpoint estimator only)
+// =====================================================================================================
+nwSrc              = input.source(close, 'Source', group = G_TREND)
+nwKernelType       = input.string('Gaussian', 'Kernel Type', options = ['Gaussian', 'Epanechnikov', 'Triangular', 'Quartic', 'Cosine', 'Rational Quadratic'], group = G_TREND)
+nwLookback         = input.int(50, 'Lookback Window', minval = 1, maxval = 500, group = G_TREND)
+nwBandwidth        = input.int(5, 'Kernel Bandwidth', minval = 1, group = G_TREND)
+nwHMult            = input.float(2.0, 'Bandwidth Multiplier', minval = 0.1, step = 0.1, group = G_TREND)
+nwRelWeight        = input.float(8.0, 'Relative Weighting (RQ)', minval = 0.1, step = 0.25, group = G_TREND)
+nwSlopeLen         = input.int(3, 'Slope Lookback (bars)', minval = 1, maxval = 50, group = G_TREND)
+nwRequirePriceSide = input.bool(true, 'Require Source On Trend Side Of NW Line', group = G_TREND)
+
+nwKernelWeight(float dist, float h, string ktype, float rq) =>
+    float w = 0.0
+    if h > 0.0
+        float u = dist / h
+        if ktype == 'Gaussian'
+            w := math.exp(-(dist * dist) / (2.0 * h * h))
+        else if ktype == 'Rational Quadratic'
+            w := math.pow(1.0 + (dist * dist) / (2.0 * rq * h * h), -rq)
+        else if math.abs(u) <= 1.0
+            if ktype == 'Epanechnikov'
+                w := 0.75 * (1.0 - u * u)
+            else if ktype == 'Triangular'
+                w := 1.0 - math.abs(u)
+            else if ktype == 'Quartic'
+                w := (15.0 / 16.0) * math.pow(1.0 - u * u, 2.0)
+            else if ktype == 'Cosine'
+                w := (math.pi / 4.0) * math.cos(math.pi * u / 2.0)
+    w
+
+float nwH    = nwBandwidth * nwHMult
+float nwSumW = 0.0
+float nwSumP = 0.0
+for i = 0 to nwLookback
+    float w = nwKernelWeight(i, nwH, nwKernelType, nwRelWeight)
+    nwSumW += w
+    nwSumP += nwSrc[i] * w
+
+float nwTrend = nwSumW != 0.0 ? nwSumP / nwSumW : na
+
+bool nwValid    = not na(nwTrend) and not na(nwTrend[nwSlopeLen])
+bool nwSlopeUp  = nwValid and nwTrend > nwTrend[nwSlopeLen]
+bool nwSlopeDn  = nwValid and nwTrend < nwTrend[nwSlopeLen]
+bool trendLong  = nwSlopeUp and (not nwRequirePriceSide or nwSrc > nwTrend)
+bool trendShort = nwSlopeDn and (not nwRequirePriceSide or nwSrc < nwTrend)
+
+// =====================================================================================================
+// ENTRY | LORENTZIAN CLASSIFICATION
+// =====================================================================================================
+lcSource             = input.source(close, 'Source', group = G_ENTRY)
+lcNeighbors          = input.int(12, 'Neighbors Count', minval = 1, maxval = 100, step = 1, group = G_ENTRY)
+lcMaxBarsBack        = input.int(2000, 'Max Bars Back', minval = 1, group = G_ENTRY)
+lcIncludeFullHistory = input.bool(false, 'Include Full History', group = G_ENTRY)
+lcHorizon            = input.int(4, 'Training Label Horizon (bars)', minval = 1, maxval = 50, group = G_ENTRY)
+lcSpacing            = input.int(4, 'Neighbor Chronological Spacing (bars)', minval = 2, maxval = 50, group = G_ENTRY)
+lcDistQuantile       = input.float(0.75, 'Distance Reset Quantile', minval = 0.0, maxval = 1.0, step = 0.05, group = G_ENTRY)
+lcEntryWindow        = input.int(2, 'Entry Signal Window (bars after LC flip)', minval = 0, maxval = 50, group = G_ENTRY)
+
+lcFeatureCount = input.int(5, 'Feature Count', minval = 2, maxval = 5, group = G_ENTRY_F)
+lcF1String = input.string('RSI', 'Feature 1', options = ['RSI', 'WT', 'CCI', 'ADX'], inline = '01', group = G_ENTRY_F)
+lcF1ParamA = input.int(14, 'Parameter A', inline = '02', group = G_ENTRY_F)
+lcF1ParamB = input.int(1, 'Parameter B', inline = '02', group = G_ENTRY_F)
+lcF2String = input.string('WT', 'Feature 2', options = ['RSI', 'WT', 'CCI', 'ADX'], inline = '03', group = G_ENTRY_F)
+lcF2ParamA = input.int(10, 'Parameter A', inline = '04', group = G_ENTRY_F)
+lcF2ParamB = input.int(11, 'Parameter B', inline = '04', group = G_ENTRY_F)
+lcF3String = input.string('CCI', 'Feature 3', options = ['RSI', 'WT', 'CCI', 'ADX'], inline = '05', group = G_ENTRY_F)
+lcF3ParamA = input.int(20, 'Parameter A', inline = '06', group = G_ENTRY_F)
+lcF3ParamB = input.int(1, 'Parameter B', inline = '06', group = G_ENTRY_F)
+lcF4String = input.string('ADX', 'Feature 4', options = ['RSI', 'WT', 'CCI', 'ADX'], inline = '07', group = G_ENTRY_F)
+lcF4ParamA = input.int(20, 'Parameter A', inline = '08', group = G_ENTRY_F)
+lcF4ParamB = input.int(2, 'Parameter B', inline = '08', group = G_ENTRY_F)
+lcF5String = input.string('RSI', 'Feature 5', options = ['RSI', 'WT', 'CCI', 'ADX'], inline = '09', group = G_ENTRY_F)
+lcF5ParamA = input.int(9, 'Parameter A', inline = '10', group = G_ENTRY_F)
+lcF5ParamB = input.int(1, 'Parameter B', inline = '10', group = G_ENTRY_F)
+
+lcUseVolFilter    = input.bool(true, 'Use Volatility Filter', group = G_ENTRY_X)
+lcVolMinLen       = input.int(1, 'Volatility Filter Recent ATR Length', minval = 1, group = G_ENTRY_X)
+lcVolMaxLen       = input.int(10, 'Volatility Filter Historical ATR Length', minval = 1, group = G_ENTRY_X)
+lcUseRegimeFilter = input.bool(true, 'Use Regime Filter', inline = 'regime', group = G_ENTRY_X)
+lcRegimeThreshold = input.float(-0.1, 'Threshold', minval = -10, maxval = 10, step = 0.1, inline = 'regime', group = G_ENTRY_X)
+lcRegimeSrc       = input.source(ohlc4, 'Regime Filter Source', group = G_ENTRY_X)
+lcUseAdxFilter    = input.bool(false, 'Use ADX Filter', inline = 'adx', group = G_ENTRY_X)
+lcAdxThreshold    = input.int(20, 'Threshold', minval = 0, maxval = 100, step = 1, inline = 'adx', group = G_ENTRY_X)
+lcAdxLen          = input.int(14, 'ADX Filter Length', minval = 1, group = G_ENTRY_X)
+
+type LcFeatureArrays
+    array<float> f1
+    array<float> f2
+    array<float> f3
+    array<float> f4
+    array<float> f5
+
+type LcFeatureSeries
+    float f1
+    float f2
+    float f3
+    float f4
+    float f5
+
+lcSeriesFrom(feature_string, _close, _high, _low, _hlc3, f_paramA, f_paramB) =>
+    switch feature_string
+        'RSI' => ml.n_rsi(_close, f_paramA, f_paramB)
+        'WT'  => ml.n_wt(_hlc3, f_paramA, f_paramB)
+        'CCI' => ml.n_cci(_close, f_paramA, f_paramB)
+        'ADX' => ml.n_adx(_high, _low, _close, f_paramA)
+
+lcLorentzianDistance(int i, int featureCount, LcFeatureSeries fs, LcFeatureArrays fa) =>
+    switch featureCount
+        5 => math.log(1 + math.abs(fs.f1 - array.get(fa.f1, i))) +
+             math.log(1 + math.abs(fs.f2 - array.get(fa.f2, i))) +
+             math.log(1 + math.abs(fs.f3 - array.get(fa.f3, i))) +
+             math.log(1 + math.abs(fs.f4 - array.get(fa.f4, i))) +
+             math.log(1 + math.abs(fs.f5 - array.get(fa.f5, i)))
+        4 => math.log(1 + math.abs(fs.f1 - array.get(fa.f1, i))) +
+             math.log(1 + math.abs(fs.f2 - array.get(fa.f2, i))) +
+             math.log(1 + math.abs(fs.f3 - array.get(fa.f3, i))) +
+             math.log(1 + math.abs(fs.f4 - array.get(fa.f4, i)))
+        3 => math.log(1 + math.abs(fs.f1 - array.get(fa.f1, i))) +
+             math.log(1 + math.abs(fs.f2 - array.get(fa.f2, i))) +
+             math.log(1 + math.abs(fs.f3 - array.get(fa.f3, i)))
+        2 => math.log(1 + math.abs(fs.f1 - array.get(fa.f1, i))) +
+             math.log(1 + math.abs(fs.f2 - array.get(fa.f2, i)))
+
+// LC-internal prediction filters (part of the LC signal definition, as in the source)
+bool lcFilterVol    = ml.filter_volatility(lcVolMinLen, lcVolMaxLen, lcUseVolFilter)
+bool lcFilterRegime = ml.regime_filter(lcRegimeSrc, lcRegimeThreshold, lcUseRegimeFilter)
+bool lcFilterAdx    = ml.filter_adx(lcSource, lcAdxLen, lcAdxThreshold, lcUseAdxFilter)
+bool lcFilterAll    = lcFilterVol and lcFilterRegime and lcFilterAdx
+
+// Feature series and storage
+lcFeatureSeries = LcFeatureSeries.new(
+     lcSeriesFrom(lcF1String, close, high, low, hlc3, lcF1ParamA, lcF1ParamB),
+     lcSeriesFrom(lcF2String, close, high, low, hlc3, lcF2ParamA, lcF2ParamB),
+     lcSeriesFrom(lcF3String, close, high, low, hlc3, lcF3ParamA, lcF3ParamB),
+     lcSeriesFrom(lcF4String, close, high, low, hlc3, lcF4ParamA, lcF4ParamB),
+     lcSeriesFrom(lcF5String, close, high, low, hlc3, lcF5ParamA, lcF5ParamB))
+
+var lcF1Array = array.new_float()
+var lcF2Array = array.new_float()
+var lcF3Array = array.new_float()
+var lcF4Array = array.new_float()
+var lcF5Array = array.new_float()
+array.push(lcF1Array, lcFeatureSeries.f1)
+array.push(lcF2Array, lcFeatureSeries.f2)
+array.push(lcF3Array, lcFeatureSeries.f3)
+array.push(lcF4Array, lcFeatureSeries.f4)
+array.push(lcF5Array, lcFeatureSeries.f5)
+lcFeatureArrays = LcFeatureArrays.new(lcF1Array, lcF2Array, lcF3Array, lcF4Array, lcF5Array)
+
+// Class labels
+int LC_LONG    = 1
+int LC_SHORT   = -1
+int LC_NEUTRAL = 0
+
+int lcMaxBarsBackIndex = last_bar_index >= lcMaxBarsBack ? last_bar_index - lcMaxBarsBack : 0
+
+// Training labels (label logic ported as-is from the source)
+int lcYTrainSeries = lcSource[lcHorizon] < lcSource[0] ? LC_SHORT : lcSource[lcHorizon] > lcSource[0] ? LC_LONG : LC_NEUTRAL
+var lcYTrainArray  = array.new_int(0)
+var lcPredictions  = array.new_float(0)
+var lcDistances    = array.new_float(0)
+var float lcPrediction = 0.0
+var int lcSignal       = LC_NEUTRAL
+array.push(lcYTrainArray, lcYTrainSeries)
+
+// Approximate Nearest Neighbors search with Lorentzian distance
+float lcLastDistance = -1.0
+int lcSize       = math.min(lcMaxBarsBack - 1, array.size(lcYTrainArray) - 1)
+int lcSizeLoop   = math.min(lcMaxBarsBack - 1, lcSize)
+int lcStartIndex = lcIncludeFullHistory ? 0 : lcMaxBarsBackIndex
+
+if bar_index >= lcMaxBarsBackIndex
+    for i = lcStartIndex to lcSizeLoop
+        float d = lcLorentzianDistance(i, lcFeatureCount, lcFeatureSeries, lcFeatureArrays)
+        if d >= lcLastDistance and i % lcSpacing != 0
+            lcLastDistance := d
+            array.push(lcDistances, d)
+            array.push(lcPredictions, float(array.get(lcYTrainArray, i)))
+            if array.size(lcPredictions) > lcNeighbors
+                lcLastDistance := array.get(lcDistances, math.round(lcNeighbors * lcDistQuantile))
+                array.shift(lcDistances)
+                array.shift(lcPredictions)
+    lcPrediction := array.sum(lcPredictions)
+
+// Filtered LC signal state
+lcSignal := lcPrediction > 0 and lcFilterAll ? LC_LONG : lcPrediction < 0 and lcFilterAll ? LC_SHORT : nz(lcSignal[1])
+bool lcSignalChanged = nz(ta.change(lcSignal)) != 0
+bool lcNewBuy        = lcSignal == LC_LONG and lcSignalChanged
+bool lcNewSell       = lcSignal == LC_SHORT and lcSignalChanged
+
+// Entry-signal window and one-trade-per-flip bookkeeping
+int lcLongFlipBar  = ta.valuewhen(lcNewBuy, bar_index, 0)
+int lcShortFlipBar = ta.valuewhen(lcNewSell, bar_index, 0)
+var int lcUsedLongFlipBar  = na
+var int lcUsedShortFlipBar = na
+
+bool lcLongInWindow  = not na(lcLongFlipBar) and bar_index - lcLongFlipBar <= lcEntryWindow
+bool lcShortInWindow = not na(lcShortFlipBar) and bar_index - lcShortFlipBar <= lcEntryWindow
+bool lcLongFresh     = na(lcUsedLongFlipBar) or lcLongFlipBar != lcUsedLongFlipBar
+bool lcShortFresh    = na(lcUsedShortFlipBar) or lcShortFlipBar != lcUsedShortFlipBar
+
+bool entryLong  = lcSignal == LC_LONG and lcLongInWindow and lcLongFresh
+bool entryShort = lcSignal == LC_SHORT and lcShortInWindow and lcShortFresh
+
+// =====================================================================================================
+// TIMING | WAVETREND
+// =====================================================================================================
+wtSrc         = input.source(hlc3, 'Source', group = G_TIMING)
+wtN1          = input.int(10, 'Channel Length', minval = 1, group = G_TIMING)
+wtN2          = input.int(21, 'Average Length', minval = 1, group = G_TIMING)
+wtSigLen      = input.int(4, 'Signal SMA Length', minval = 1, group = G_TIMING)
+wtCciConst    = input.float(0.015, 'CCI Scaling Constant', minval = 0.0001, step = 0.001, group = G_TIMING)
+wtObLevel1    = input.int(60, 'Over Bought Level 1', group = G_TIMING)
+wtObLevel2    = input.int(40, 'Over Bought Level 2', group = G_TIMING)
+wtOsLevel1    = input.int(-60, 'Over Sold Level 1', group = G_TIMING)
+wtOsLevel2    = input.int(-40, 'Over Sold Level 2', group = G_TIMING)
+wtExtLevelSel = input.string('Level 2', 'Overextension Cap Uses', options = ['Level 1', 'Level 2'], group = G_TIMING)
+wtTimingMode  = input.string('Not Overextended Only', 'Timing Mode', options = ['Recent Cross + Not Overextended', 'Not Overextended Only'], group = G_TIMING)
+wtCrossWindow = input.int(5, 'Cross Window (bars)', minval = 0, maxval = 50, group = G_TIMING)
+
+float wtEsa = ta.ema(wtSrc, wtN1)
+float wtD   = ta.ema(math.abs(wtSrc - wtEsa), wtN1)
+float wtCi  = (wtSrc - wtEsa) / (wtCciConst * wtD)
+float wt1   = ta.ema(wtCi, wtN2)
+float wt2   = ta.sma(wt1, wtSigLen)
+
+bool wtCrossUp     = ta.crossover(wt1, wt2)
+bool wtCrossDn     = ta.crossunder(wt1, wt2)
+int  wtBarsSinceUp = ta.barssince(wtCrossUp)
+int  wtBarsSinceDn = ta.barssince(wtCrossDn)
+float wtObCap      = wtExtLevelSel == 'Level 1' ? wtObLevel1 : wtObLevel2
+float wtOsCap      = wtExtLevelSel == 'Level 1' ? wtOsLevel1 : wtOsLevel2
+
+bool wtLongNotExtended  = not na(wt1) and wt1 < wtObCap
+bool wtShortNotExtended = not na(wt1) and wt1 > wtOsCap
+bool wtLongRecentCross  = not na(wtBarsSinceUp) and wtBarsSinceUp <= wtCrossWindow and wt1 > wt2
+bool wtShortRecentCross = not na(wtBarsSinceDn) and wtBarsSinceDn <= wtCrossWindow and wt1 < wt2
+bool wtUseCross         = wtTimingMode == 'Recent Cross + Not Overextended'
+
+bool timingLong  = wtLongNotExtended and (not wtUseCross or wtLongRecentCross)
+bool timingShort = wtShortNotExtended and (not wtUseCross or wtShortRecentCross)
+
+// =====================================================================================================
+// CONFIRMATION | WEIS WAVE VOLUME
+// =====================================================================================================
+wwvMethod          = input.string('ATR', 'Renko Assignment Method', options = ['ATR', 'Traditional', 'Part of Price'], group = G_CONFIRM)
+wwvMethodValue     = input.float(14.0, 'Value', minval = 0, group = G_CONFIRM)
+wwvPriceSource     = input.string('Close', 'Price Source', options = ['Close', 'Open / Close', 'High / Low'], group = G_CONFIRM)
+wwvUseTrueRange    = input.string('Auto', 'Use True Range instead of Volume', options = ['Always', 'Auto', 'Never'], group = G_CONFIRM)
+wwvNormalize       = input.bool(false, 'Normalize', group = G_CONFIRM)
+wwvUseVolThreshold = input.bool(false, 'Require Wave Volume Above Its Average', group = G_CONFIRM)
+wwvAvgLen          = input.int(20, 'Wave Volume Average Length', minval = 1, group = G_CONFIRM)
+wwvAvgMult         = input.float(1.0, 'Wave Volume Average Multiplier', minval = 0.0, step = 0.1, group = G_CONFIRM)
+
+bool  wwvUseClose     = wwvPriceSource == 'Close'
+bool  wwvUseOpenClose = wwvPriceSource == 'Open / Close' or wwvUseClose
+float wwvVol          = wwvUseTrueRange == 'Always' or wwvUseTrueRange == 'Auto' and na(volume) ? ta.tr : volume
+float wwvOp           = wwvUseClose ? close : open
+float wwvHi           = wwvUseOpenClose ? (close >= wwvOp ? close : wwvOp) : high
+float wwvLo           = wwvUseOpenClose ? (close <= wwvOp ? close : wwvOp) : low
+
+int   wwvAtrLen = math.max(1, math.round(wwvMethodValue))
+float wwvAtr    = ta.atr(wwvAtrLen)
+float wwvBrick  = wwvMethod == 'ATR' ? wwvAtr : wwvMethod == 'Part of Price' ? close / wwvMethodValue : wwvMethodValue
+
+float wwvCurrClose = na
+float wwvPrevClose = nz(wwvCurrClose[1])
+float wwvPrevHigh  = wwvPrevClose + wwvBrick
+float wwvPrevLow   = wwvPrevClose - wwvBrick
+wwvCurrClose := wwvHi > wwvPrevHigh ? wwvHi : wwvLo < wwvPrevLow ? wwvLo : wwvPrevClose
+
+int wwvDirection = na
+wwvDirection := wwvCurrClose > wwvPrevClose ? 1 : wwvCurrClose < wwvPrevClose ? -1 : nz(wwvDirection[1])
+bool wwvDirChanged = nz(ta.change(wwvDirection)) != 0
+bool wwvDirUp      = wwvDirection > 0
+bool wwvDirDown    = wwvDirection < 0
+
+int wwvBarCount = 1
+wwvBarCount := not wwvDirChanged and wwvNormalize ? nz(wwvBarCount[1]) + wwvBarCount : wwvBarCount
+wwvVol      := not wwvDirChanged ? nz(wwvVol[1]) + wwvVol : wwvVol
+float wwvRes = wwvBarCount > 1 ? wwvVol / wwvBarCount : wwvVol
+
+float wwvResAvg = ta.sma(wwvRes, wwvAvgLen)
+bool  wwvVolOk  = not wwvUseVolThreshold or (not na(wwvResAvg) and wwvRes >= wwvResAvg * wwvAvgMult)
+
+bool confirmLong  = wwvDirUp and wwvVolOk
+bool confirmShort = wwvDirDown and wwvVolOk
+
+// =====================================================================================================
+// REGIME GATE | SQUEEZE MOMENTUM (non-directional)
+// =====================================================================================================
+sqzSrc                 = input.source(close, 'Source', group = G_REGIME)
+sqzBbLen               = input.int(20, 'BB Length', minval = 1, group = G_REGIME)
+sqzBbMult              = input.float(2.0, 'BB MultFactor', minval = 0.1, step = 0.1, group = G_REGIME)
+sqzKcLen               = input.int(20, 'KC Length', minval = 1, group = G_REGIME)
+sqzKcMult              = input.float(1.5, 'KC MultFactor', minval = 0.1, step = 0.1, group = G_REGIME)
+sqzUseTrueRange        = input.bool(true, 'Use TrueRange (KC)', group = G_REGIME)
+sqzReplicateQuirk      = input.bool(true, 'Replicate Original BB Width (BB uses KC MultFactor)', group = G_REGIME)
+sqzRegimeMode          = input.string('Squeeze Off', 'Regime Condition', options = ['Squeeze Off', 'Not In Squeeze', 'Released Within Window'], group = G_REGIME)
+sqzReleaseWindow       = input.int(5, 'Release Window (bars)', minval = 1, maxval = 100, group = G_REGIME)
+sqzRequireMomExpansion = input.bool(false, 'Require |Momentum| Expanding', group = G_REGIME)
+
+float sqzBasis   = ta.sma(sqzSrc, sqzBbLen)
+float sqzDev     = (sqzReplicateQuirk ? sqzKcMult : sqzBbMult) * ta.stdev(sqzSrc, sqzBbLen)
+float sqzUpperBB = sqzBasis + sqzDev
+float sqzLowerBB = sqzBasis - sqzDev
+
+float sqzMa      = ta.sma(sqzSrc, sqzKcLen)
+float sqzRange   = sqzUseTrueRange ? ta.tr : (high - low)
+float sqzRangeMa = ta.sma(sqzRange, sqzKcLen)
+float sqzUpperKC = sqzMa + sqzRangeMa * sqzKcMult
+float sqzLowerKC = sqzMa - sqzRangeMa * sqzKcMult
+
+bool sqzOn  = sqzLowerBB > sqzLowerKC and sqzUpperBB < sqzUpperKC
+bool sqzOff = sqzLowerBB < sqzLowerKC and sqzUpperBB > sqzUpperKC
+
+float sqzVal = ta.linreg(sqzSrc - math.avg(math.avg(ta.highest(high, sqzKcLen), ta.lowest(low, sqzKcLen)), ta.sma(sqzSrc, sqzKcLen)), sqzKcLen, 0)
+
+int  sqzBarsSinceOn   = ta.barssince(sqzOn)
+bool sqzFiredRecently = not sqzOn and not na(sqzBarsSinceOn) and sqzBarsSinceOn <= sqzReleaseWindow
+bool sqzMomExpanding  = not na(sqzVal) and not na(sqzVal[1]) and math.abs(sqzVal) > math.abs(sqzVal[1])
+
+bool sqzRegimeBase = switch sqzRegimeMode
+    'Squeeze Off'            => sqzOff
+    'Not In Squeeze'         => not sqzOn
+    'Released Within Window' => sqzFiredRecently
+    => false
+
+bool regimeGate = sqzRegimeBase and (not sqzRequireMomExpansion or sqzMomExpanding)
+
+// =====================================================================================================
+// FINAL ENTRY CONDITIONS
+// =====================================================================================================
+bool barConfirmed = barstate.isconfirmed
+
+bool longCondition  = barConfirmed and allowLongs and regimeGate and trendLong and entryLong and timingLong and confirmLong
+bool shortCondition = barConfirmed and allowShorts and regimeGate and trendShort and entryShort and timingShort and confirmShort
+
+// =====================================================================================================
+// EXITS & RISK
+// =====================================================================================================
+exitMode     = input.string('Either (LC Default)', 'Exit Mode', options = ['LC Signal Flip', 'LC Fixed Hold', 'Either (LC Default)'], group = G_EXIT)
+exitHoldBars = input.int(12, 'Fixed Hold (bars from entry signal)', minval = 1, group = G_EXIT)
+riskUseSl    = input.bool(true, 'Use ATR Stop-Loss', group = G_EXIT)
+riskUseTp    = input.bool(true, 'Use ATR Take-Profit', group = G_EXIT)
+riskAtrLen   = input.int(14, 'Risk ATR Length', minval = 1, group = G_EXIT)
+riskSlMult   = input.float(2.0, 'Stop-Loss ATR Multiplier', minval = 0.1, step = 0.1, group = G_EXIT)
+riskTpMult   = input.float(3.0, 'Take-Profit ATR Multiplier', minval = 0.1, step = 0.1, group = G_EXIT)
+
+float riskAtr = ta.atr(riskAtrLen)
+
+var float longStopLvl  = na
+var float longTpLvl    = na
+var float shortStopLvl = na
+var float shortTpLvl   = na
+
+bool inLong  = strategy.position_size > 0
+bool inShort = strategy.position_size < 0
+
+int  lastEntryBar        = strategy.opentrades > 0 ? strategy.opentrades.entry_bar_index(strategy.opentrades - 1) : na
+int  barsFromEntrySignal = na(lastEntryBar) ? 0 : bar_index - lastEntryBar + 1
+bool holdExpired         = barsFromEntrySignal >= exitHoldBars
+
+bool exitLongRaw = switch exitMode
+    'LC Signal Flip' => lcNewSell
+    'LC Fixed Hold'  => holdExpired
+    => lcNewSell or holdExpired
+
+bool exitShortRaw = switch exitMode
+    'LC Signal Flip' => lcNewBuy
+    'LC Fixed Hold'  => holdExpired
+    => lcNewBuy or holdExpired
+
+bool longExit  = barConfirmed and inLong and exitLongRaw and not shortCondition
+bool shortExit = barConfirmed and inShort and exitShortRaw and not longCondition
+
+// ---- Orders
+if longCondition
+    lcUsedLongFlipBar := lcLongFlipBar
+    if not inLong and not na(riskAtr)
+        longStopLvl := close - riskAtr * riskSlMult
+        longTpLvl   := close + riskAtr * riskTpMult
+        strategy.entry('Long', strategy.long, comment = 'Long')
+
+if shortCondition
+    lcUsedShortFlipBar := lcShortFlipBar
+    if not inShort and not na(riskAtr)
+        shortStopLvl := close + riskAtr * riskSlMult
+        shortTpLvl   := close - riskAtr * riskTpMult
+        strategy.entry('Short', strategy.short, comment = 'Short')
+
+if longExit
+    strategy.close('Long', comment = 'LC Exit L')
+
+if shortExit
+    strategy.close('Short', comment = 'LC Exit S')
+
+if riskUseSl or riskUseTp
+    if (inLong or longCondition) and not na(longStopLvl)
+        strategy.exit('Long Risk', from_entry = 'Long', stop = riskUseSl ? longStopLvl : na, limit = riskUseTp ? longTpLvl : na, comment_loss = 'SL L', comment_profit = 'TP L')
+    else
+        strategy.cancel('Long Risk')
+    if (inShort or shortCondition) and not na(shortStopLvl)
+        strategy.exit('Short Risk', from_entry = 'Short', stop = riskUseSl ? shortStopLvl : na, limit = riskUseTp ? shortTpLvl : na, comment_loss = 'SL S', comment_profit = 'TP S')
+    else
+        strategy.cancel('Short Risk')
+
+// =====================================================================================================
+// VISUALS & AUDIT (data window)
+// =====================================================================================================
+color nwColor = nwSlopeUp ? color.new(#00ffaa, 0) : color.new(#ff0000, 0)
+plot(nwTrend, 'NW Trend (causal endpoint)', color = nwColor, linewidth = 2)
+plotshape(longCondition, title = 'Long Entry', style = shape.triangleup, location = location.belowbar, color = color.new(#009988, 0), size = size.small)
+plotshape(shortCondition, title = 'Short Entry', style = shape.triangledown, location = location.abovebar, color = color.new(#CC3311, 0), size = size.small)
+plot(inLong and riskUseSl ? longStopLvl : na, 'Long Stop', color = color.new(#CC3311, 30), style = plot.style_linebr)
+plot(inShort and riskUseSl ? shortStopLvl : na, 'Short Stop', color = color.new(#CC3311, 30), style = plot.style_linebr)
+plot(inLong and riskUseTp ? longTpLvl : na, 'Long Target', color = color.new(#009988, 30), style = plot.style_linebr)
+plot(inShort and riskUseTp ? shortTpLvl : na, 'Short Target', color = color.new(#009988, 30), style = plot.style_linebr)
+
+plot(regimeGate ? 1 : 0, 'C1 Regime Gate (SQZ)', display = display.data_window)
+plot(trendLong ? 1 : 0, 'C2 Trend Long (NW)', display = display.data_window)
+plot(trendShort ? 1 : 0, 'C2 Trend Short (NW)', display = display.data_window)
+plot(entryLong ? 1 : 0, 'C3 Entry Long (LC)', display = display.data_window)
+plot(entryShort ? 1 : 0, 'C3 Entry Short (LC)', display = display.data_window)
+plot(timingLong ? 1 : 0, 'C4 Timing Long (WT)', display = display.data_window)
+plot(timingShort ? 1 : 0, 'C4 Timing Short (WT)', display = display.data_window)
+plot(confirmLong ? 1 : 0, 'C5 Confirm Long (WWV)', display = display.data_window)
+plot(confirmShort ? 1 : 0, 'C5 Confirm Short (WWV)', display = display.data_window)
+plot(lcPrediction, 'LC Prediction', display = display.data_window)
+plot(lcSignal, 'LC Signal State', display = display.data_window)
+plot(wt1, 'WT1', display = display.data_window)
+plot(wt2, 'WT2', display = display.data_window)
+plot(wwvRes, 'Weis Wave Volume', display = display.data_window)
+plot(wwvDirection, 'Weis Wave Direction', display = display.data_window)
+plot(sqzVal, 'Squeeze Momentum', display = display.data_window)
+plot(sqzOn ? 1 : sqzOff ? -1 : 0, 'Squeeze State (1 on, -1 off, 0 none)', display = display.data_window)

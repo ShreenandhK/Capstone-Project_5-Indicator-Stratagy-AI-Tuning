@@ -1,0 +1,25 @@
+{
+  "source": "Yahoo Finance GET /v8/finance/chart/^NSEI interval=1d (split-adjusted, not dividend-adjusted)",
+  "tradingview_symbol": "NSE:NIFTY",
+  "session_date": "Asia/Kolkata date",
+  "splits": [],
+  "quality": {
+    "rows_dropped_na_or_nonpositive": 34,
+    "rows_ohlc_repaired": 0,
+    "flat_bars_o_eq_h_eq_l_eq_c": 0,
+    "zero_or_na_volume_bars": 1333,
+    "close_moves_gt_20pct": [],
+    "calendar_gaps_gt_5_days": [
+      {
+        "after": "2014-10-01",
+        "next": "2014-10-07",
+        "days": 6
+      }
+    ]
+  },
+  "fetched_utc": "2026-09-13T20:42:16Z",
+  "rows": 4659,
+  "first_bar": "2007-09-17T00:00:00Z",
+  "last_bar": "2026-09-11T00:00:00Z",
+  "sha256": "21fb5a4b5f53628194ba280db1e708b26d73955caed64f93d9ff84e55686395d"
+}

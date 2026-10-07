@@ -1,0 +1,81 @@
+parameter,role,pine_baseline_default,frozen_run17,changed,tunable
+allowLongs,Strategy controls,True,True,False,True
+allowShorts,Strategy controls,True,True,False,True
+nwSrc,Trend - Nadaraya-Watson,close,close,False,False
+nwKernelType,Trend - Nadaraya-Watson,Gaussian,Gaussian,False,True
+nwLookback,Trend - Nadaraya-Watson,50,50,False,True
+nwBandwidth,Trend - Nadaraya-Watson,8,5,True,True
+nwHMult,Trend - Nadaraya-Watson,2.0,2.0,False,True
+nwRelWeight,Trend - Nadaraya-Watson,8.0,8.0,False,True
+nwSlopeLen,Trend - Nadaraya-Watson,1,3,True,True
+nwRequirePriceSide,Trend - Nadaraya-Watson,False,True,True,True
+lcSource,Entry - Lorentzian Classification,close,close,False,False
+lcNeighbors,Entry - Lorentzian Classification,8,12,True,True
+lcMaxBarsBack,Entry - Lorentzian Classification,2000,2000,False,True
+lcIncludeFullHistory,Entry - Lorentzian Classification,False,False,False,False
+lcHorizon,Entry - Lorentzian Classification,4,4,False,True
+lcSpacing,Entry - Lorentzian Classification,4,4,False,True
+lcDistQuantile,Entry - Lorentzian Classification,0.75,0.75,False,True
+lcEntryWindow,Entry - Lorentzian Classification,2,2,False,True
+lcFeatureCount,Entry - Lorentzian Classification,5,5,False,True
+lcF1String,Entry - Lorentzian Classification,RSI,RSI,False,True
+lcF1ParamA,Entry - Lorentzian Classification,14,14,False,True
+lcF1ParamB,Entry - Lorentzian Classification,1,1,False,True
+lcF2String,Entry - Lorentzian Classification,WT,WT,False,True
+lcF2ParamA,Entry - Lorentzian Classification,10,10,False,True
+lcF2ParamB,Entry - Lorentzian Classification,11,11,False,True
+lcF3String,Entry - Lorentzian Classification,CCI,CCI,False,True
+lcF3ParamA,Entry - Lorentzian Classification,20,20,False,True
+lcF3ParamB,Entry - Lorentzian Classification,1,1,False,True
+lcF4String,Entry - Lorentzian Classification,ADX,ADX,False,True
+lcF4ParamA,Entry - Lorentzian Classification,20,20,False,True
+lcF4ParamB,Entry - Lorentzian Classification,2,2,False,True
+lcF5String,Entry - Lorentzian Classification,RSI,RSI,False,True
+lcF5ParamA,Entry - Lorentzian Classification,9,9,False,True
+lcF5ParamB,Entry - Lorentzian Classification,1,1,False,True
+lcUseVolFilter,Entry - Lorentzian Classification,True,True,False,True
+lcVolMinLen,Entry - Lorentzian Classification,1,1,False,True
+lcVolMaxLen,Entry - Lorentzian Classification,10,10,False,True
+lcUseRegimeFilter,Entry - Lorentzian Classification,True,True,False,True
+lcRegimeThreshold,Entry - Lorentzian Classification,-0.1,-0.1,False,True
+lcRegimeSrc,Entry - Lorentzian Classification,ohlc4,ohlc4,False,False
+lcUseAdxFilter,Entry - Lorentzian Classification,False,False,False,True
+lcAdxThreshold,Entry - Lorentzian Classification,20,20,False,True
+lcAdxLen,Entry - Lorentzian Classification,14,14,False,True
+wtSrc,Timing - WaveTrend,hlc3,hlc3,False,False
+wtN1,Timing - WaveTrend,10,10,False,True
+wtN2,Timing - WaveTrend,21,21,False,True
+wtSigLen,Timing - WaveTrend,4,4,False,True
+wtCciConst,Timing - WaveTrend,0.015,0.015,False,False
+wtObLevel1,Timing - WaveTrend,60,60,False,True
+wtObLevel2,Timing - WaveTrend,53,40,True,True
+wtOsLevel1,Timing - WaveTrend,-60,-60,False,True
+wtOsLevel2,Timing - WaveTrend,-53,-40,True,True
+wtExtLevelSel,Timing - WaveTrend,Level 2,Level 2,False,True
+wtTimingMode,Timing - WaveTrend,Recent Cross + Not Overextended,Not Overextended Only,True,True
+wtCrossWindow,Timing - WaveTrend,5,5,False,True
+wwvMethod,Confirmation - Weis Wave Volume,ATR,ATR,False,True
+wwvMethodValue,Confirmation - Weis Wave Volume,14.0,14.0,False,True
+wwvPriceSource,Confirmation - Weis Wave Volume,Close,Close,False,True
+wwvUseTrueRange,Confirmation - Weis Wave Volume,Auto,Auto,False,False
+wwvNormalize,Confirmation - Weis Wave Volume,False,False,False,True
+wwvUseVolThreshold,Confirmation - Weis Wave Volume,False,False,False,True
+wwvAvgLen,Confirmation - Weis Wave Volume,20,20,False,True
+wwvAvgMult,Confirmation - Weis Wave Volume,1.0,1.0,False,True
+sqzSrc,Regime gate - Squeeze Momentum,close,close,False,False
+sqzBbLen,Regime gate - Squeeze Momentum,20,20,False,True
+sqzBbMult,Regime gate - Squeeze Momentum,2.0,2.0,False,True
+sqzKcLen,Regime gate - Squeeze Momentum,20,20,False,True
+sqzKcMult,Regime gate - Squeeze Momentum,1.5,1.5,False,True
+sqzUseTrueRange,Regime gate - Squeeze Momentum,True,True,False,True
+sqzReplicateQuirk,Regime gate - Squeeze Momentum,True,True,False,True
+sqzRegimeMode,Regime gate - Squeeze Momentum,Squeeze Off,Squeeze Off,False,True
+sqzReleaseWindow,Regime gate - Squeeze Momentum,5,5,False,True
+sqzRequireMomExpansion,Regime gate - Squeeze Momentum,False,False,False,True
+exitMode,Exits & risk,Either (LC Default),Either (LC Default),False,True
+exitHoldBars,Exits & risk,4,12,True,True
+riskUseSl,Exits & risk,True,True,False,True
+riskUseTp,Exits & risk,False,True,True,True
+riskAtrLen,Exits & risk,14,14,False,True
+riskSlMult,Exits & risk,2.0,2.0,False,True
+riskTpMult,Exits & risk,3.0,3.0,False,True

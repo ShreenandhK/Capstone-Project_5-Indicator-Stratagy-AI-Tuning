@@ -1,0 +1,15 @@
+RUN: 12
+VERDICT: CONTINUE
+SCORECARD:
+- Risk-adjusted: Sharpe 0.071 (vs run11 base 0.213, Δ-0.141; vs incumbent run06 0.226, Δ-0.155) — one of the two worst post-run06 results, tied with run10 (0.075). PF 1.016 (down from 1.053, barely clears G2). PSR0 0.545 (down from 0.632), trade_tstat 0.111 (down from 0.329). 6th consecutive run below the 0.276 raise-bar.
+- Drawdown: max_dd 1.94% (worst since run05's 2.30%, up from run11's 1.53%), duration flat 392d. Skew 0.821→0.462 (weaker), kurtosis 15.5→16.0 (worse).
+- Significance: trades 219→222 (flat count, but composition shifted materially — short PF collapsed).
+- Robustness: BOTH sub-periods that had improved under run11 reversed: 2023 -0.623%→-0.796% (moved away from the G4 near-miss), 2025H1 -0.713%→-1.141% (notably worse); 2024 marginally better (2.064%→2.197%). G4 still 1/3, and now further from closing than run11 was. Short PF collapsed 1.073→0.993 (net +$46.4→-$4.9); long PF flat (1.035→1.038). Stress worse (-2.252%→-2.755%), still fails G3.
+
+MECHANISM RULING: The tuner's hypothesis (dropping redundant RSI-feature-5 raises ADX's relative weight, sharpening trend-regime matching) is REFUTED by the data — it degraded Sharpe, PF, both weak sub-periods, and stress simultaneously. This is feature-COUNT-specific evidence, not a verdict on LC feature engineering broadly; feature TYPE/ParamA/ParamB swaps remain untested.
+
+WEAKNESSES: Regression across nearly every axis relative to its own base (run11). Trade-quality composition (short side) is now fragile again.
+
+DEMANDS FOR NEXT CONFIG: (1) Revert to run11 base (lcFeatureCount=5). (2) If probing LC features again, change feature TYPE or ParamA/B (e.g., swap feature 5 from RSI to WT or CCI) rather than count — count-reduction is refuted. (3) Continue the run11 trend-role direction (nwBandwidth neighborhood) since it's the only lever that has moved 2023 meaningfully toward positive.
+
+PLATEAU ASSESSMENT — weighing the invariance evidence explicitly: The run11-vs-run06 supplement (26% entries swapped, both carrier trades replaced, yet net $70.42 vs $69.44, PF-ex-top2 0.985 vs 0.983) shows the run06/11 "12-bar hold + TP + refined NW trend" neighborhood produces a REPRODUCIBLE aggregate economic profile independent of which specific trades populate it — that argues against "two magic rows" overfitting and for a real, if weak, structural pattern in that neighborhood, i.e., NOT pure noise-mining there. But run12 shows that invariance does not extend to every lever: this feature-count change broke the pattern in the wrong direction, proving the space is not flat/saturated — different levers still produce materially different (here, worse) outcomes. That is evidence FOR continued search, not against it. Numeric precondition (≥5 consecutive without +0.05) is met at 6, but role coverage remains shallow (LC feature type/params, WT ob/os thresholds, WWV method/length, SQZ release-window magnitude, exit riskTpMult all untested), and the reproducible-but-weak core (PF-ex-top2 ≈0.98, still <1) means the ceiling hasn't been tested. Best (fallback) = run06, sharpe 0.226. Ruling: PLATEAU REJECTED — continue. Budget: 13/25 remain.

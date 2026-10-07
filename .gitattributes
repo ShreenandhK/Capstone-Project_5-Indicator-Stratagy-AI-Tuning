@@ -1,0 +1,2 @@
+# Store data/result CSVs byte-for-byte so their SHA-256 matches the recorded checksums on every OS
+*.csv -text

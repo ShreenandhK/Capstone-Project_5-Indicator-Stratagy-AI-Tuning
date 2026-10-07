@@ -1,0 +1,6 @@
+period,sample,net_return_pct,sharpe,trades,profit_factor,bars
+2023,in-sample,0.0372,0.0416,58,1.0118,8759
+2024,in-sample,1.8327,1.2674,78,1.3778,8784
+2025H1,in-sample,-0.7337,-1.0455,52,0.7841,4344
+2025H2,out-of-sample,-1.0319,-1.3904,61,0.6977,4416
+2026YTD,out-of-sample,-2.1104,-2.377,64,0.5136,6136

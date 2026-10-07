@@ -1,0 +1,822 @@
+{
+  "market": "HDFCBANK_1D",
+  "label": "NSE:HDFCBANK 1D",
+  "timeframe": "1D",
+  "data": {
+    "source": "Yahoo Finance GET /v8/finance/chart/HDFCBANK.NS interval=1d (split-adjusted, not dividend-adjusted)",
+    "tradingview_symbol": "NSE:HDFCBANK",
+    "session_date": "Asia/Kolkata date",
+    "splits": [
+      {
+        "date": "2011-07-14",
+        "ratio": "5:1"
+      },
+      {
+        "date": "2019-09-19",
+        "ratio": "2:1"
+      },
+      {
+        "date": "2025-08-26",
+        "ratio": "2:1"
+      }
+    ],
+    "quality": {
+      "rows_dropped_na_or_nonpositive": 7,
+      "manual_fixes": [],
+      "rows_dropped_zero_volume_flat": 123,
+      "rows_dropped_zero_volume_flat_dates": [
+        "1996-01-26",
+        "1996-02-21",
+        "1996-03-05",
+        "1996-03-20",
+        "1996-04-05",
+        "1996-08-15",
+        "1996-10-02",
+        "1996-10-21",
+        "1996-10-30",
+        "1996-11-12",
+        "1996-12-25",
+        "1996-12-27",
+        "1996-12-30",
+        "1997-01-23",
+        "1997-03-07",
+        "1997-03-24",
+        "1997-03-28",
+        "1997-04-08",
+        "1997-04-14",
+        "1997-04-16",
+        "1997-04-18",
+        "1997-05-01",
+        "1997-07-18",
+        "1997-08-15",
+        "1997-10-02",
+        "1997-10-03",
+        "1997-10-06",
+        "1997-10-07",
+        "1997-10-08",
+        "1997-10-31",
+        "1997-11-14",
+        "1997-12-25",
+        "1998-01-26",
+        "1998-02-16",
+        "1998-03-13",
+        "1998-04-08",
+        "1998-04-14",
+        "1998-05-01",
+        "1998-05-07",
+        "1998-08-26",
+        "1998-10-01",
+        "1998-10-02",
+        "1998-10-21",
+        "1998-11-04",
+        "1998-11-25",
+        "1998-12-25",
+        "1999-01-20",
+        "1999-01-26",
+        "1999-03-02",
+        "1999-03-29",
+        "1999-04-02",
+        "1999-04-14",
+        "1999-04-27",
+        "1999-09-13",
+        "1999-10-19",
+        "1999-11-08",
+        "1999-11-23",
+        "1999-12-31",
+        "2000-01-26",
+        "2000-03-17",
+        "2000-03-20",
+        "2000-04-14",
+        "2000-04-21",
+        "2000-05-01",
+        "2000-08-15",
+        "2000-09-01",
+        "2000-10-02",
+        "2000-12-25",
+        "2001-01-26",
+        "2001-03-06",
+        "2001-04-05",
+        "2001-04-13",
+        "2001-05-01",
+        "2001-08-15",
+        "2001-08-22",
+        "2001-10-02",
+        "2001-10-26",
+        "2001-11-16",
+        "2001-11-30",
+        "2001-12-17",
+        "2001-12-25",
+        "2002-03-25",
+        "2002-03-29",
+        "2002-05-01",
+        "2002-08-15",
+        "2002-09-10",
+        "2002-10-02",
+        "2002-10-15",
+        "2002-11-06",
+        "2002-11-19",
+        "2002-12-25",
+        "2003-02-13",
+        "2003-03-14",
+        "2003-03-18",
+        "2003-04-14",
+        "2003-04-18",
+        "2003-05-01",
+        "2003-08-15",
+        "2003-10-02",
+        "2003-11-26",
+        "2003-12-25",
+        "2004-01-26",
+        "2004-02-02",
+        "2004-03-02",
+        "2004-04-09",
+        "2004-04-14",
+        "2004-04-26",
+        "2004-10-13",
+        "2004-10-22",
+        "2004-11-15",
+        "2004-11-26",
+        "2005-07-28",
+        "2005-11-04",
+        "2008-11-27",
+        "2009-04-30",
+        "2009-10-13",
+        "2014-04-24",
+        "2014-10-15",
+        "2025-03-18",
+        "2026-01-15",
+        "2026-05-01",
+        "2026-05-28",
+        "2026-06-26"
+      ],
+      "rows_ohlc_repaired": 28,
+      "flat_bars_o_eq_h_eq_l_eq_c": 1,
+      "zero_or_na_volume_bars": 0,
+      "close_moves_gt_20pct": [
+        {
+          "date": "2004-05-17",
+          "ret_pct": -20.64
+        },
+        {
+          "date": "2004-05-18",
+          "ret_pct": 25.82
+        }
+      ],
+      "calendar_gaps_gt_5_days": [
+        {
+          "after": "1997-10-01",
+          "next": "1997-10-09",
+          "days": 8
+        },
+        {
+          "after": "2014-10-01",
+          "next": "2014-10-07",
+          "days": 6
+        }
+      ]
+    },
+    "fetched_utc": "2026-09-13T20:44:25Z",
+    "rows": 7586,
+    "first_bar": "1996-01-01T00:00:00Z",
+    "last_bar": "2026-09-11T00:00:00Z",
+    "sha256": "57b35da446cf4de72f1852e3b9179942d84dbadcd3af1b1f3942418395549168"
+  },
+  "bars_total": 7586,
+  "warmup_bars": 2000,
+  "window_start": "2004-01-20",
+  "window_end": "2026-09-11",
+  "window_bars": 5586,
+  "params": {
+    "config_hash": "ee67637fc13d",
+    "strategy_props": {
+      "initial_capital": 10000.0,
+      "default_qty_value": 10.0,
+      "commission_value": 0.075,
+      "slippage": 2.0,
+      "pyramiding": 0.0
+    },
+    "matches_frozen_run": null,
+    "diff_vs_frozen": {
+      "nwBandwidth": [
+        5,
+        8
+      ],
+      "nwSlopeLen": [
+        3,
+        1
+      ],
+      "nwRequirePriceSide": [
+        true,
+        false
+      ],
+      "lcNeighbors": [
+        12,
+        8
+      ],
+      "wtObLevel2": [
+        40,
+        53
+      ],
+      "wtOsLevel2": [
+        -40,
+        -53
+      ],
+      "wtTimingMode": [
+        "Not Overextended Only",
+        "Recent Cross + Not Overextended"
+      ],
+      "exitHoldBars": [
+        12,
+        4
+      ],
+      "riskUseTp": [
+        true,
+        false
+      ]
+    },
+    "diff_vs_engine_defaults": {},
+    "variant": "pretuning",
+    "diff_vs_current_pine": {
+      "nwBandwidth": [
+        8,
+        5
+      ],
+      "nwSlopeLen": [
+        1,
+        3
+      ],
+      "nwRequirePriceSide": [
+        false,
+        true
+      ],
+      "lcNeighbors": [
+        8,
+        12
+      ],
+      "wtObLevel2": [
+        53,
+        40
+      ],
+      "wtOsLevel2": [
+        -53,
+        -40
+      ],
+      "wtTimingMode": [
+        "Recent Cross + Not Overextended",
+        "Not Overextended Only"
+      ],
+      "exitHoldBars": [
+        4,
+        12
+      ],
+      "riskUseTp": [
+        false,
+        true
+      ]
+    }
+  },
+  "base": {
+    "final_equity": 9916.989391856498,
+    "net_profit": -83.0106081435024,
+    "net_return_pct": -0.8301060814350225,
+    "cagr_pct": -0.03680397157236337,
+    "ann_vol_pct": 0.5055815592961501,
+    "sharpe": -0.07184488418958765,
+    "sortino": -0.08983418588808825,
+    "max_drawdown": 390.94914043420795,
+    "max_drawdown_pct": 3.884898205233678,
+    "max_drawdown_duration_days": 7842.0,
+    "psr_sharpe_gt_0": 0.3640976436001192,
+    "n_days": 5586,
+    "annualisation_periods": 252,
+    "trades": 40,
+    "exposure_pct": 2.685284640171858,
+    "all": {
+      "trades": 40,
+      "net_profit": -83.0106081435037,
+      "gross_profit": 409.441576042942,
+      "gross_loss": 492.45218418644566,
+      "profit_factor": 0.8314341761309454,
+      "percent_profitable": 47.5,
+      "winning_trades": 19,
+      "losing_trades": 21,
+      "avg_trade": -2.0752652035875925,
+      "avg_trade_pct": -0.21834722086132322,
+      "median_trade_pct": -0.26735330023547066,
+      "avg_win": 21.549556633839053,
+      "avg_loss": -23.450104008878366,
+      "ratio_avg_win_avg_loss": 0.9189535630920974,
+      "largest_win": 84.3442623322328,
+      "largest_loss": -69.7609391719754,
+      "avg_bars_in_trade": 3.75,
+      "commission_paid": 59.10958769150395
+    },
+    "long": {
+      "trades": 20,
+      "net_profit": 77.37075500568574,
+      "gross_profit": 258.9263806880486,
+      "gross_loss": 181.55562568236283,
+      "profit_factor": 1.4261545447291635,
+      "percent_profitable": 55.00000000000001,
+      "winning_trades": 11,
+      "losing_trades": 9,
+      "avg_trade": 3.868537750284287,
+      "avg_trade_pct": 0.37712157117749606,
+      "median_trade_pct": 0.20906849285636897,
+      "avg_win": 23.53876188073169,
+      "avg_loss": -20.172847298040313,
+      "ratio_avg_win_avg_loss": 1.1668537184147703,
+      "largest_win": 84.3442623322328,
+      "largest_loss": -69.7609391719754,
+      "avg_bars_in_trade": 3.9,
+      "commission_paid": 29.51367135263116
+    },
+    "short": {
+      "trades": 20,
+      "net_profit": -160.3813631491894,
+      "gross_profit": 150.51519535489342,
+      "gross_loss": 310.89655850408286,
+      "profit_factor": 0.48413271629353455,
+      "percent_profitable": 40.0,
+      "winning_trades": 8,
+      "losing_trades": 12,
+      "avg_trade": -8.01906815745947,
+      "avg_trade_pct": -0.8138160129001424,
+      "median_trade_pct": -0.7058264637066359,
+      "avg_win": 18.814399419361678,
+      "avg_loss": -25.908046542006904,
+      "ratio_avg_win_avg_loss": 0.7261990744403019,
+      "largest_win": 46.92425405402255,
+      "largest_loss": -68.88217585048352,
+      "avg_bars_in_trade": 3.6,
+      "commission_paid": 29.59591633887279
+    },
+    "exit_reasons": {
+      "LC Exit": 35,
+      "SL": 5
+    },
+    "trade_tstat": -0.42870097898689624,
+    "win_rate_ci95_pct": [
+      32.9354701126789,
+      62.502637893307536
+    ],
+    "costs": {
+      "commission_pct": 0.075,
+      "slip_mode": "ticks",
+      "slip_value": 2,
+      "mintick": 0.05
+    }
+  },
+  "stress": {
+    "final_equity": 9895.112175586497,
+    "net_profit": -104.88782441350304,
+    "net_return_pct": -1.048878244135032,
+    "cagr_pct": -0.046552584923664764,
+    "ann_vol_pct": 0.5025587512499369,
+    "sharpe": -0.09213232978812266,
+    "sortino": -0.11545958684629462,
+    "max_drawdown": 395.6533743199143,
+    "max_drawdown_pct": 3.9305600671668994,
+    "max_drawdown_duration_days": 7842.0,
+    "psr_sharpe_gt_0": 0.3269993817016812,
+    "n_days": 5586,
+    "annualisation_periods": 252,
+    "trades": 40,
+    "exposure_pct": 2.685284640171858,
+    "all": {
+      "trades": 40,
+      "net_profit": -104.88782441349964,
+      "gross_profit": 394.0272553933803,
+      "gross_loss": 498.91507980688004,
+      "profit_factor": 0.789768181683144,
+      "percent_profitable": 47.5,
+      "winning_trades": 19,
+      "losing_trades": 21,
+      "avg_trade": -2.6221956103374913,
+      "avg_trade_pct": -0.2734936341791598,
+      "median_trade_pct": -0.37788643615222195,
+      "avg_win": 20.738276599651595,
+      "avg_loss": -23.757860943184763,
+      "ratio_avg_win_avg_loss": 0.8729016744918959,
+      "largest_win": 83.21537572803125,
+      "largest_loss": -67.90514706966373,
+      "avg_bars_in_trade": 3.75,
+      "commission_paid": 78.804860697655
+    },
+    "long": {
+      "trades": 20,
+      "net_profit": 65.43565118869577,
+      "gross_profit": 249.4362958092371,
+      "gross_loss": 184.00064462054132,
+      "profit_factor": 1.3556272931741171,
+      "percent_profitable": 55.00000000000001,
+      "winning_trades": 11,
+      "losing_trades": 9,
+      "avg_trade": 3.2717825594347887,
+      "avg_trade_pct": 0.3169372655092092,
+      "median_trade_pct": 0.13269248014044274,
+      "avg_win": 22.676026891748826,
+      "avg_loss": -20.444516068949035,
+      "ratio_avg_win_avg_loss": 1.1091496035060957,
+      "largest_win": 83.21537572803125,
+      "largest_loss": -67.90514706966373,
+      "avg_bars_in_trade": 3.9,
+      "commission_paid": 39.351623680840085
+    },
+    "short": {
+      "trades": 20,
+      "net_profit": -170.3234756021954,
+      "gross_profit": 144.59095958414326,
+      "gross_loss": 314.9144351863387,
+      "profit_factor": 0.45914363848893436,
+      "percent_profitable": 40.0,
+      "winning_trades": 8,
+      "losing_trades": 12,
+      "avg_trade": -8.51617378010977,
+      "avg_trade_pct": -0.863924533867529,
+      "median_trade_pct": -0.8291573145750017,
+      "avg_win": 18.073869948017908,
+      "avg_loss": -26.24286959886156,
+      "ratio_avg_win_avg_loss": 0.6887154577334016,
+      "largest_win": 47.344810627183236,
+      "largest_loss": -63.369615473772384,
+      "avg_bars_in_trade": 3.6,
+      "commission_paid": 39.45323701681492
+    },
+    "exit_reasons": {
+      "LC Exit": 35,
+      "SL": 5
+    },
+    "trade_tstat": -0.5468390245275324,
+    "win_rate_ci95_pct": [
+      32.9354701126789,
+      62.502637893307536
+    ],
+    "costs": {
+      "commission_pct": 0.1,
+      "slip_mode": "bps",
+      "slip_value": 5
+    }
+  },
+  "long_only": {
+    "final_equity": 10079.738829265078,
+    "net_profit": 79.73882926507758,
+    "net_return_pct": 0.7973882926507692,
+    "cagr_pct": 0.0350794229312168,
+    "ann_vol_pct": 0.2733776679672161,
+    "sharpe": 0.13243000976953168,
+    "sortino": 0.1902902549208417,
+    "max_drawdown": 152.3614874830164,
+    "max_drawdown_pct": 1.520586929476897,
+    "max_drawdown_duration_days": 4710.0,
+    "psr_sharpe_gt_0": 0.7325140737464161,
+    "n_days": 5586,
+    "annualisation_periods": 252,
+    "trades": 20,
+    "exposure_pct": 1.3963480128893664,
+    "all": {
+      "trades": 20,
+      "net_profit": 79.73882926507261,
+      "gross_profit": 263.10341657003806,
+      "gross_loss": 183.36458730496543,
+      "profit_factor": 1.4348649345931441,
+      "percent_profitable": 55.00000000000001,
+      "winning_trades": 11,
+      "losing_trades": 9,
+      "avg_trade": 3.9869414632536304,
+      "avg_trade_pct": 0.3771215711774959,
+      "median_trade_pct": 0.209068492856369,
+      "avg_win": 23.918492415458005,
+      "avg_loss": -20.37384303388505,
+      "ratio_avg_win_avg_loss": 1.1739804010307542,
+      "largest_win": 85.8240108190414,
+      "largest_loss": -70.24480064302287,
+      "avg_bars_in_trade": 3.9,
+      "commission_paid": 29.899937835996354
+    },
+    "long": {
+      "trades": 20,
+      "net_profit": 79.73882926507261,
+      "gross_profit": 263.10341657003806,
+      "gross_loss": 183.36458730496543,
+      "profit_factor": 1.4348649345931441,
+      "percent_profitable": 55.00000000000001,
+      "winning_trades": 11,
+      "losing_trades": 9,
+      "avg_trade": 3.9869414632536304,
+      "avg_trade_pct": 0.3771215711774959,
+      "median_trade_pct": 0.209068492856369,
+      "avg_win": 23.918492415458005,
+      "avg_loss": -20.37384303388505,
+      "ratio_avg_win_avg_loss": 1.1739804010307542,
+      "largest_win": 85.8240108190414,
+      "largest_loss": -70.24480064302287,
+      "avg_bars_in_trade": 3.9,
+      "commission_paid": 29.899937835996354
+    },
+    "short": {
+      "trades": 0,
+      "net_profit": 0.0,
+      "gross_profit": 0.0,
+      "gross_loss": -0.0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN,
+      "winning_trades": 0,
+      "losing_trades": 0,
+      "avg_trade": NaN,
+      "avg_trade_pct": NaN,
+      "median_trade_pct": NaN,
+      "avg_win": NaN,
+      "avg_loss": NaN,
+      "ratio_avg_win_avg_loss": NaN,
+      "largest_win": NaN,
+      "largest_loss": NaN,
+      "avg_bars_in_trade": NaN,
+      "commission_paid": 0.0
+    },
+    "exit_reasons": {
+      "LC Exit": 19,
+      "SL": 1
+    },
+    "trade_tstat": 0.480636726037493,
+    "win_rate_ci95_pct": [
+      34.20853424503424,
+      74.18021417443758
+    ],
+    "costs": {
+      "commission_pct": 0.075,
+      "slip_mode": "ticks",
+      "slip_value": 2,
+      "mintick": 0.05
+    }
+  },
+  "buy_and_hold": {
+    "final_equity": 381805.94556186086,
+    "net_profit": 371805.94556186086,
+    "net_return_pct": 3718.059455618609,
+    "cagr_pct": 17.4504480771545,
+    "ann_vol_pct": 28.822093732195377,
+    "sharpe": 0.7136673180895154,
+    "sortino": 1.0826007170923797,
+    "max_drawdown": 175633.45646800142,
+    "max_drawdown_pct": 55.356496297125105,
+    "max_drawdown_duration_days": 680.0,
+    "psr_sharpe_gt_0": 0.99964857824847,
+    "n_days": 5586,
+    "annualisation_periods": 252
+  },
+  "years": {
+    "2004": {
+      "from": "2004-01-20",
+      "to": "2004-12-31",
+      "net_return_pct": 0.0,
+      "buy_and_hold_pct": 40.256070005100455,
+      "sharpe": NaN,
+      "trades": 0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN
+    },
+    "2005": {
+      "from": "2005-01-03",
+      "to": "2005-12-30",
+      "net_return_pct": -0.6888217585048317,
+      "buy_and_hold_pct": 36.20639995758672,
+      "sharpe": -0.4991338428017189,
+      "trades": 1,
+      "profit_factor": 0.0,
+      "percent_profitable": 0.0
+    },
+    "2006": {
+      "from": "2006-01-02",
+      "to": "2006-12-29",
+      "net_return_pct": 0.0,
+      "buy_and_hold_pct": 50.68077341798942,
+      "sharpe": NaN,
+      "trades": 0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN
+    },
+    "2007": {
+      "from": "2007-01-02",
+      "to": "2007-12-31",
+      "net_return_pct": -0.3436500341395865,
+      "buy_and_hold_pct": 61.90833525831112,
+      "sharpe": -0.797842053546854,
+      "trades": 1,
+      "profit_factor": 0.0,
+      "percent_profitable": 0.0
+    },
+    "2008": {
+      "from": "2008-01-01",
+      "to": "2008-12-31",
+      "net_return_pct": -0.7048702934342677,
+      "buy_and_hold_pct": -42.26187209138597,
+      "sharpe": -1.3582798032111467,
+      "trades": 1,
+      "profit_factor": 0.0,
+      "percent_profitable": 0.0
+    },
+    "2009": {
+      "from": "2009-01-02",
+      "to": "2009-12-31",
+      "net_return_pct": 0.0,
+      "buy_and_hold_pct": 70.50634313483081,
+      "sharpe": NaN,
+      "trades": 0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN
+    },
+    "2010": {
+      "from": "2010-01-04",
+      "to": "2010-12-31",
+      "net_return_pct": -0.05583789730736477,
+      "buy_and_hold_pct": 37.838147270890296,
+      "sharpe": -0.18420445180607226,
+      "trades": 2,
+      "profit_factor": 0.3084563995640264,
+      "percent_profitable": 50.0
+    },
+    "2011": {
+      "from": "2011-01-03",
+      "to": "2011-12-30",
+      "net_return_pct": 0.06732869110763762,
+      "buy_and_hold_pct": -9.039568729361214,
+      "sharpe": 0.09856606633575744,
+      "trades": 2,
+      "profit_factor": 1.1690683776818145,
+      "percent_profitable": 50.0
+    },
+    "2012": {
+      "from": "2012-01-02",
+      "to": "2012-12-31",
+      "net_return_pct": -0.1429614344375052,
+      "buy_and_hold_pct": 58.97855594735542,
+      "sharpe": -0.5908823290819379,
+      "trades": 1,
+      "profit_factor": 0.0,
+      "percent_profitable": 0.0
+    },
+    "2013": {
+      "from": "2013-01-01",
+      "to": "2013-12-31",
+      "net_return_pct": -0.44842603863742836,
+      "buy_and_hold_pct": -1.8788683257359051,
+      "sharpe": -0.500188409572414,
+      "trades": 4,
+      "profit_factor": 0.4299766404912573,
+      "percent_profitable": 50.0
+    },
+    "2014": {
+      "from": "2014-01-01",
+      "to": "2014-12-31",
+      "net_return_pct": 0.4180592018153684,
+      "buy_and_hold_pct": 42.915072534546475,
+      "sharpe": 0.9532158448977215,
+      "trades": 2,
+      "profit_factor": Infinity,
+      "percent_profitable": 100.0
+    },
+    "2015": {
+      "from": "2015-01-01",
+      "to": "2015-12-31",
+      "net_return_pct": 0.0,
+      "buy_and_hold_pct": 13.719005059629797,
+      "sharpe": NaN,
+      "trades": 0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN
+    },
+    "2016": {
+      "from": "2016-01-01",
+      "to": "2016-12-30",
+      "net_return_pct": 0.01627553789802505,
+      "buy_and_hold_pct": 11.463283648566168,
+      "sharpe": 0.09665715198041339,
+      "trades": 1,
+      "profit_factor": Infinity,
+      "percent_profitable": 100.0
+    },
+    "2017": {
+      "from": "2017-01-02",
+      "to": "2017-12-29",
+      "net_return_pct": -0.46239509420328284,
+      "buy_and_hold_pct": 55.23131322773014,
+      "sharpe": -1.2898635425689335,
+      "trades": 4,
+      "profit_factor": 0.05364508052388654,
+      "percent_profitable": 25.0
+    },
+    "2018": {
+      "from": "2018-01-01",
+      "to": "2018-12-31",
+      "net_return_pct": -0.33092084949871703,
+      "buy_and_hold_pct": 13.314458638713544,
+      "sharpe": -1.08171511497781,
+      "trades": 2,
+      "profit_factor": 0.0,
+      "percent_profitable": 0.0
+    },
+    "2019": {
+      "from": "2019-01-01",
+      "to": "2019-12-31",
+      "net_return_pct": -0.49492903276211475,
+      "buy_and_hold_pct": 19.913277547140474,
+      "sharpe": -1.6259827287016322,
+      "trades": 2,
+      "profit_factor": 0.0,
+      "percent_profitable": 0.0
+    },
+    "2020": {
+      "from": "2020-01-01",
+      "to": "2020-12-31",
+      "net_return_pct": 1.7905109943708863,
+      "buy_and_hold_pct": 12.90779626990821,
+      "sharpe": 2.543566880955455,
+      "trades": 4,
+      "profit_factor": 53.33370011169721,
+      "percent_profitable": 75.0
+    },
+    "2021": {
+      "from": "2021-01-01",
+      "to": "2021-12-31",
+      "net_return_pct": 0.3188382793138933,
+      "buy_and_hold_pct": 3.0007640559511772,
+      "sharpe": 0.9008824316317378,
+      "trades": 4,
+      "profit_factor": 7.499608507402836,
+      "percent_profitable": 75.0
+    },
+    "2022": {
+      "from": "2022-01-03",
+      "to": "2022-12-30",
+      "net_return_pct": 0.2833605219244806,
+      "buy_and_hold_pct": 10.054751760621915,
+      "sharpe": 0.4651001109328813,
+      "trades": 4,
+      "profit_factor": 2.5321304301616547,
+      "percent_profitable": 75.0
+    },
+    "2023": {
+      "from": "2023-01-02",
+      "to": "2023-12-29",
+      "net_return_pct": 0.057959148787034565,
+      "buy_and_hold_pct": 4.981111960483275,
+      "sharpe": 0.18652864675520336,
+      "trades": 2,
+      "profit_factor": 1.4980211940680226,
+      "percent_profitable": 50.0
+    },
+    "2024": {
+      "from": "2024-01-01",
+      "to": "2024-12-31",
+      "net_return_pct": -0.08594529470213885,
+      "buy_and_hold_pct": 3.7209288050314537,
+      "sharpe": -0.2026097433105578,
+      "trades": 3,
+      "profit_factor": 0.3755039829050078,
+      "percent_profitable": 33.33333333333333
+    },
+    "2025": {
+      "from": "2025-01-01",
+      "to": "2025-12-31",
+      "net_return_pct": 0.0,
+      "buy_and_hold_pct": 11.819953841784049,
+      "sharpe": NaN,
+      "trades": 0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN
+    },
+    "2026": {
+      "from": "2026-01-01",
+      "to": "2026-09-11",
+      "net_return_pct": 0.0,
+      "buy_and_hold_pct": -28.546207497716168,
+      "sharpe": NaN,
+      "trades": 0,
+      "profit_factor": NaN,
+      "percent_profitable": NaN
+    }
+  },
+  "periods": {},
+  "funnel": {
+    "long": {
+      "LC entry window (fresh flip)": 277,
+      "+ SQZ regime gate": 77,
+      "+ NW trend": 57,
+      "+ WT timing": 20,
+      "+ WWV confirmation": 20,
+      "= entry condition bars": 20
+    },
+    "short": {
+      "LC entry window (fresh flip)": 277,
+      "+ SQZ regime gate": 71,
+      "+ NW trend": 29,
+      "+ WT timing": 20,
+      "+ WWV confirmation": 20,
+      "= entry condition bars": 20
+    },
+    "lc_flips_long": 101,
+    "lc_flips_short": 102
+  },
+  "runtime_s": 0.6752770000020973
+}

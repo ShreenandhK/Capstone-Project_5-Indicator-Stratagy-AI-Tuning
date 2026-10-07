@@ -1,0 +1,59 @@
+// ====================================================================================================
+// CITATION / PROVENANCE  (third-party code, reproduced unmodified for research provenance)
+//
+//   Indicator  : Squeeze Momentum Indicator [LazyBear]
+//   Author     : LazyBear  (TradingView account: https://www.tradingview.com/u/LazyBear/)
+//   Published  : 2014-07-04, TradingView, open-source script
+//   Source     : https://www.tradingview.com/script/nqQ1DT5a-Squeeze-Momentum-Indicator-LazyBear/
+//   Licence    : No licence text in the source; published open-source under TradingView House Rules
+//   Concept    : derivative of John Carter's "TTM Squeeze", Mastering the Trade, ch. 11 (per the author)
+//   Pine       : legacy Pine v1/v2 syntax (study(), no //@version), as published
+//   Retrieved  : 2026-10-07. The code below this block is the author's published source, verified
+//                line by line against the TradingView page (whitespace and blank lines aside).
+//   Use in this project: ported (re-implemented) in `Combined Role-Based Strategy.pine` and
+//                `backtest/engine/`; this file itself is not modified or executed by the study.
+//
+//   Cite as    : LazyBear (2014). Squeeze Momentum Indicator [LazyBear] [Pine Script indicator]. TradingView.
+//                https://www.tradingview.com/script/nqQ1DT5a-Squeeze-Momentum-Indicator-LazyBear/
+// ====================================================================================================
+
+//
+// @author LazyBear 
+// List of all my indicators: https://www.tradingview.com/v/4IneGo8h/
+//
+study(shorttitle = "SQZMOM_LB", title="Squeeze Momentum Indicator [LazyBear]", overlay=false)
+
+length = input(20, title="BB Length")
+mult = input(2.0,title="BB MultFactor")
+lengthKC=input(20, title="KC Length")
+multKC = input(1.5, title="KC MultFactor")
+
+useTrueRange = input(true, title="Use TrueRange (KC)", type=bool)
+
+// Calculate BB
+source = close
+basis = sma(source, length)
+dev = multKC * stdev(source, length)
+upperBB = basis + dev
+lowerBB = basis - dev
+
+// Calculate KC
+ma = sma(source, lengthKC)
+range = useTrueRange ? tr : (high - low)
+rangema = sma(range, lengthKC)
+upperKC = ma + rangema * multKC
+lowerKC = ma - rangema * multKC
+
+sqzOn  = (lowerBB > lowerKC) and (upperBB < upperKC)
+sqzOff = (lowerBB < lowerKC) and (upperBB > upperKC)
+noSqz  = (sqzOn == false) and (sqzOff == false)
+
+val = linreg(source  -  avg(avg(highest(high, lengthKC), lowest(low, lengthKC)),sma(close,lengthKC)), 
+            lengthKC,0)
+
+bcolor = iff( val > 0, 
+            iff( val > nz(val[1]), lime, green),
+            iff( val < nz(val[1]), red, maroon))
+scolor = noSqz ? blue : sqzOn ? black : gray 
+plot(val, color=bcolor, style=histogram, linewidth=4)
+plot(0, color=scolor, style=cross, linewidth=2)

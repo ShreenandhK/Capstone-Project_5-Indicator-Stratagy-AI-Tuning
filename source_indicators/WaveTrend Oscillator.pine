@@ -1,0 +1,52 @@
+// ====================================================================================================
+// CITATION / PROVENANCE  (third-party code, reproduced unmodified for research provenance)
+//
+//   Indicator  : Indicator: WaveTrend Oscillator [WT]
+//   Author     : LazyBear  (TradingView account: https://www.tradingview.com/u/LazyBear/)
+//   Published  : 2014-05-27, TradingView, open-source script
+//   Source     : https://www.tradingview.com/script/2KE8wTuF-Indicator-WaveTrend-Oscillator-WT/
+//   Licence    : No licence text in the source; published open-source under TradingView House Rules
+//   Concept    : port of an earlier TradeStation/MetaTrader WaveTrend indicator (per the author)
+//   Author note: "If you use this code in its original/modified form, do drop me a note."
+//   Pine       : legacy Pine v1/v2 syntax (study(), no //@version), as published
+//   Retrieved  : 2026-10-07. The code below this block is the author's published source, verified
+//                line by line against the TradingView page (whitespace and blank lines aside).
+//   Use in this project: ported (re-implemented) in `Combined Role-Based Strategy.pine` and
+//                `backtest/engine/`; this file itself is not modified or executed by the study.
+//
+//   Cite as    : LazyBear (2014). Indicator: WaveTrend Oscillator [WT] [Pine Script indicator]. TradingView.
+//                https://www.tradingview.com/script/2KE8wTuF-Indicator-WaveTrend-Oscillator-WT/
+// ====================================================================================================
+
+//
+// @author LazyBear
+//
+// If you use this code in its original/modified form, do drop me a note.
+//
+study(title="WaveTrend [LazyBear]", shorttitle="WT_LB")
+n1 = input(10, "Channel Length")
+n2 = input(21, "Average Length")
+obLevel1 = input(60, "Over Bought Level 1")
+obLevel2 = input(53, "Over Bought Level 2")
+osLevel1 = input(-60, "Over Sold Level 1")
+osLevel2 = input(-53, "Over Sold Level 2")
+ 
+ap = hlc3 
+esa = ema(ap, n1)
+d = ema(abs(ap - esa), n1)
+ci = (ap - esa) / (0.015 * d)
+tci = ema(ci, n2)
+ 
+wt1 = tci
+wt2 = sma(wt1,4)
+
+plot(0, color=gray)
+plot(obLevel1, color=red)
+plot(osLevel1, color=green)
+plot(obLevel2, color=red, style=3)
+plot(osLevel2, color=green, style=3)
+
+plot(wt1, color=green)
+plot(wt2, color=red, style=3)
+plot(wt1-wt2, color=blue, style=area, transp=80)
+

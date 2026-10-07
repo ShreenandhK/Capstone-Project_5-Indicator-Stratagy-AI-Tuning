@@ -1,0 +1,18 @@
+{
+  "source": "Binance spot GET https://api.binance.com/api/v3/klines symbol=BTCUSDT interval=1h",
+  "symbol": "BTCUSDT",
+  "interval": "1h",
+  "fetched_utc": "2026-09-13T16:28:05Z",
+  "rows": 41199,
+  "first_bar": "2022-01-01T00:00:00Z",
+  "last_bar": "2026-09-13T15:00:00Z",
+  "gaps": [
+    {
+      "start": "2023-03-24T12:00:00Z",
+      "end": "2023-03-24T14:00:00Z",
+      "missing_bars": 1
+    }
+  ],
+  "sha256": "82423f2f69930d69d7149055a6b08c77c33a973e4e0fa631401fef25bc44a64f",
+  "validation_errors": []
+}

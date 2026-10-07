@@ -1,0 +1,18 @@
+# Python / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+
+# Yahoo Finance data (NSE): Yahoo's terms forbid redistribution. Rebuild with
+#   python backtest/multimarket/fetch_multimarket.py NIFTY_1D HDFCBANK_1D RELIANCE_1D
+backtest/multimarket/data/NIFTY_1D.csv
+backtest/multimarket/data/HDFCBANK_1D.csv
+backtest/multimarket/data/RELIANCE_1D.csv
+
+# Generated / non-research material
+*.zip
+Final_Review_PPT/
+Project_Report/**/*.docx
+backtest/RESUME.md

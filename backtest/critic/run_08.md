@@ -1,0 +1,14 @@
+RUN: 08
+VERDICT: CONTINUE
+SCORECARD:
+- Risk-adjusted: Sharpe 0.126 (vs run06 incumbent 0.226, Δ-0.100 — a clear regression, not an improvement); PF 1.039 (down from 1.060, still >1, G2 holds); PSR0 0.579 (down from 0.640); trade_tstat 0.197 (down from 0.344, further from significance). Run06 remains the high-water mark on every risk-adjusted metric across runs 06→08.
+- Drawdown: max_dd 1.33% (best yet, down from 1.50%), duration flat ~407d, skew 0.485, kurtosis 15.1 — the one clear improvement in this run.
+- Significance: trades collapsed 191→137 (-28.3%), still clears G1 but with a much smaller sample; win rate 48.9% (flat).
+- Robustness (incl. pf_ex_top2 diagnostic): SQZ 'Released Within Window' did NOT flip either weak sub-period — 2023 stays negative (-0.84%→-0.75%, still no flip), 2025H1 stays negative (-0.71%→-0.62%, still no flip); only 2024 is positive. G4 still 1/3, unresolved by this probe. Short side got WORSE: PF 1.093→0.992 (flips below 1.0), short net +$49.5→-$3.1 — the SQZ filter preferentially removed profitable shorts. Long side improved (PF 1.032→1.080, net +$20.0→+$36.3). Diagnostic trend pf_ex_top2 was 0.98(run06)→0.97(run07); run08 ≈0.955 by the same top-2-removal method (42.71+28.66 removed from $883.42 gross profit → $812.05/$850.30) — continuing the same fragility, not resolving it, and now on a smaller base. Stress improved -1.87%→-1.49% but still fails G3.
+- Carrier-trade check: of the two trades that drove run06's result, the short 2025-03-03 TP survives intact (+$42.71 vs run06's +$42.88); but the long 2025-01-13 TP is GONE entirely (its whole setup — including the preceding short 2025-01-12 signal — no longer appears in trades.csv), removing roughly $30 of run06's edge. This confirms the earlier fragility warning: the SQZ regime change further destabilizes an already thin, trade-dependent result.
+
+WEAKNESSES: This run trades quantity and short-side quality for a smaller, cleaner-looking sample, but does not solve G3/G4 and makes Sharpe/PF/significance worse than the incumbent. It is a net regression, not progress.
+
+DEMANDS FOR NEXT CONFIG: (1) Revert to run06 base (sqzRegimeMode='Squeeze Off') — this probe is answered: REFUTED as an improvement (Sharpe/PF/short-PF all fell). (2) Since SQZ mode-swap didn't fix G4, try a milder regime lever instead: `sqzReleaseWindow` or leave regime as-is and probe WWV (`wwvUseVolThreshold=true`) or the still-owed `allowShorts=false` diagnostic, now informed by run08's short-side fragility. (3) Keep reporting pf_ex_top2 and carrier-trade survival every run — both are now core robustness evidence, not just G1-G4.
+
+PLATEAU ASSESSMENT: Best (fallback) = run06, sharpe 0.226, 2 runs since last ≥0.05 improvement (07, 08 both regressed). Untested: WWV volume threshold, allowShorts isolation, further SQZ release-window tuning. 8/25 used — not plateau; two consecutive regressions is a signal to return to the incumbent, not evidence search is exhausted.

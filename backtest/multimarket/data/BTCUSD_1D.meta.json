@@ -1,0 +1,111 @@
+{
+  "source": "Bitstamp GET https://www.bitstamp.net/api/v2/ohlc/btcusd/ step=86400",
+  "tradingview_symbol": "BITSTAMP:BTCUSD",
+  "session_date": "UTC day",
+  "quality": {
+    "rows_dropped_na_or_nonpositive": 0,
+    "rows_ohlc_repaired": 0,
+    "flat_bars_o_eq_h_eq_l_eq_c": 63,
+    "zero_or_na_volume_bars": 33,
+    "close_moves_gt_20pct": [
+      {
+        "date": "2011-09-26",
+        "ret_pct": -20.66
+      },
+      {
+        "date": "2011-10-20",
+        "ret_pct": -42.86
+      },
+      {
+        "date": "2011-10-24",
+        "ret_pct": 28.63
+      },
+      {
+        "date": "2011-10-28",
+        "ret_pct": 56.13
+      },
+      {
+        "date": "2011-11-14",
+        "ret_pct": -26.27
+      },
+      {
+        "date": "2012-08-19",
+        "ret_pct": -30.16
+      },
+      {
+        "date": "2012-08-20",
+        "ret_pct": 24.69
+      },
+      {
+        "date": "2013-04-09",
+        "ret_pct": 23.38
+      },
+      {
+        "date": "2013-04-10",
+        "ret_pct": -29.26
+      },
+      {
+        "date": "2013-04-11",
+        "ret_pct": -48.52
+      },
+      {
+        "date": "2013-04-12",
+        "ret_pct": 31.77
+      },
+      {
+        "date": "2013-04-17",
+        "ret_pct": 32.15
+      },
+      {
+        "date": "2013-04-18",
+        "ret_pct": 21.47
+      },
+      {
+        "date": "2013-11-18",
+        "ret_pct": 40.14
+      },
+      {
+        "date": "2013-11-21",
+        "ret_pct": 20.2
+      },
+      {
+        "date": "2013-12-06",
+        "ret_pct": -20.41
+      },
+      {
+        "date": "2013-12-18",
+        "ret_pct": -22.81
+      },
+      {
+        "date": "2013-12-19",
+        "ret_pct": 31.73
+      },
+      {
+        "date": "2015-01-14",
+        "ret_pct": -24.49
+      },
+      {
+        "date": "2015-01-15",
+        "ret_pct": 23.09
+      },
+      {
+        "date": "2017-07-20",
+        "ret_pct": 26.92
+      },
+      {
+        "date": "2017-12-07",
+        "ret_pct": 21.85
+      },
+      {
+        "date": "2020-03-12",
+        "ret_pct": -38.98
+      }
+    ],
+    "calendar_gaps_gt_5_days": []
+  },
+  "fetched_utc": "2026-09-13T20:42:16Z",
+  "rows": 5505,
+  "first_bar": "2011-08-18T00:00:00Z",
+  "last_bar": "2026-09-12T00:00:00Z",
+  "sha256": "18aae6fd057b43b7eb9b03ec12c17e89fa1622b1eb8222713db86f22c1042405"
+}

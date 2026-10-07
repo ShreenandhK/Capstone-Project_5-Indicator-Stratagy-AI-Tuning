@@ -1,0 +1,15 @@
+RUN: 10
+VERDICT: CONTINUE
+SCORECARD:
+- Risk-adjusted: Sharpe 0.226→0.075 (Δ-0.150 — the largest regression yet, worse than runs 07/08/09); PF 1.060→1.018 (barely clears G2, weakest PF since run06); PSR0 0.640→0.547; trade_tstat 0.344→0.114. This is the 4th consecutive run below the 0.276 bar, and the worst of the four on every headline metric.
+- Drawdown: max_dd identical to run06 at 1.497% (same worst-loss trade sequence), duration worse 402→425.5d. Skew 0.571→0.346, kurtosis flat (~14.0-14.1).
+- Significance: trades 191→192 (flat); the first 29 rows of trades.csv are BYTE-IDENTICAL to run06 (same entry/exit/pnl) — the label-horizon change only starts biting later in the sample.
+- Robustness: 2025H1 is EXACTLY unchanged (net -0.71056% both runs, 51 trades, PF 0.78894 matching to 10 decimals) — lcHorizon=8 had zero effect there; 2023 marginally better (-0.844%→-0.762%, still negative); 2024 worse (2.279%→1.715%). G4 still 1/3. Short PF fell below 1.0 again (1.093→0.990, net +$49.5→-$5.9); long PF flat (~1.03-1.05). Stress worse (-1.874%→-2.350%), still fails G3.
+
+MECHANISM CHECK (per orchestrator correction): lcHorizon is not a forward prediction window. The ported label is y[t] = (src[t-H]<src[t]) ? SHORT : (src[t-H]>src[t]) ? LONG : NEUTRAL — a backward mean-reversion label comparing price H bars ago to now, attached to the CURRENT feature vector. The tuner's rationale ("align labels with the 12-bar hold") conflated this with a forward-return horizon; there's no mechanical reason a longer H should track hold length. Empirically, doubling H (4→8) lengthens the realized-move window used to call "reversion" and made results materially worse (Sharpe -0.150, PF -0.042, stress -0.48pp) — consistent with staler/less-relevant labels, not a hold-alignment benefit. Treat this lever as refuted with a correct mechanistic explanation, not just "didn't help."
+
+WEAKNESSES: Worst post-run06 result across Sharpe, PF, and t-stat; no G4 progress; the tuner's stated hypothesis for this change was mechanistically wrong, and the result confirms the wrong direction rather than being neutral.
+
+DEMANDS FOR NEXT CONFIG: (1) Revert to run06 base (lcHorizon=4). (2) Do not re-probe lcHorizon upward again — refuted with a clear mechanism. (3) If horizon is revisited, only test shorter values (e.g., 2-3) under an explicit reversion-window hypothesis, not a hold-alignment one. (4) Move to a genuinely unexplored lever targeting 2025H1/G4: `lcSpacing`, `nwBandwidth`/`nwLookback` (trend role untouched beyond slope), or `wtObLevel2`/`wtOsLevel2` (timing thresholds untouched).
+
+PLATEAU ASSESSMENT: Best (fallback) = run06, sharpe 0.226. 4 consecutive runs (07, 08, 09, 10) without a ≥0.05 improvement — below the required ≥5, so PLATEAU cannot be invoked yet regardless of role coverage. All 6 roles have been touched at least once (trend-04, entry-06/10, timing-05, confirmation-09, regime-08, exits-02/03/04), but this run's regression is the worst yet, which argues against conviction that search is exhausted — unexplored parameters remain within nearly every role. VERDICT: CONTINUE.
